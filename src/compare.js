@@ -41,6 +41,10 @@ export function compareRuns(a, b) {
   const inputB = b.usage?.input_tokens ?? 0;
   const outputA = a.usage?.output_tokens ?? 0;
   const outputB = b.usage?.output_tokens ?? 0;
+  const additionsA = a.stats?.additions ?? [...changesA.values()].reduce((sum, item) => sum + (item.additions ?? 0), 0);
+  const additionsB = b.stats?.additions ?? [...changesB.values()].reduce((sum, item) => sum + (item.additions ?? 0), 0);
+  const deletionsA = a.stats?.deletions ?? [...changesA.values()].reduce((sum, item) => sum + (item.deletions ?? 0), 0);
+  const deletionsB = b.stats?.deletions ?? [...changesB.values()].reduce((sum, item) => sum + (item.deletions ?? 0), 0);
   return {
     schemaVersion: 1,
     runs: [{ id: a.id ?? 'run-a', outcome: a.outcome ?? null }, { id: b.id ?? 'run-b', outcome: b.outcome ?? null }],
@@ -56,6 +60,11 @@ export function compareRuns(a, b) {
       onlyA: difference([...changesA.keys()], [...changesB.keys()]),
       onlyB: difference([...changesB.keys()], [...changesA.keys()]),
       different: [...changesA.keys()].filter(path => changesB.has(path) && changesA.get(path).diff !== changesB.get(path).diff).sort()
+    },
+    patchLines: {
+      a: { additions: additionsA, deletions: deletionsA },
+      b: { additions: additionsB, deletions: deletionsB },
+      delta: { additions: additionsB - additionsA, deletions: deletionsB - deletionsA }
     },
     tokens: {
       a: { input: inputA, output: outputA, total: inputA + outputA },
@@ -78,6 +87,7 @@ export function formatComparison(report) {
     `Patches only in A: ${report.patches.onlyA.join(', ') || '—'}`,
     `Patches only in B: ${report.patches.onlyB.join(', ') || '—'}`,
     `Different patches: ${report.patches.different.join(', ') || '—'}`,
+    `Patch lines: A +${report.patchLines.a.additions}/−${report.patchLines.a.deletions} → B +${report.patchLines.b.additions}/−${report.patchLines.b.deletions}`,
     `Tokens: A ${report.tokens.a.total} → B ${report.tokens.b.total} (${report.tokens.delta.total >= 0 ? '+' : ''}${report.tokens.delta.total})`
   ];
   return lines.join('\n');

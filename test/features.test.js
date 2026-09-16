@@ -73,6 +73,7 @@ test('compare identifies the first changed event, file sets, patches, and token 
   assert.equal(report.firstDifference.index, 0);
   assert.deepEqual(report.viewedFiles.onlyA, ['a.ts']);
   assert.deepEqual(report.patches.onlyB, ['b.ts']);
+  assert.deepEqual(report.patchLines.delta, { additions: 0, deletions: 0 });
   assert.equal(report.tokens.delta.total, 5);
 });
 
