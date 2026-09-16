@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1015">
+  <title>AgentLens — Run replay</title>
+  <style>/*__STYLE__*/</style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="https://github.com/fang520huang-lgtm/AgentLens" aria-label="AgentLens on GitHub">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span>agent<span class="brand-accent">lens</span><small>REPLAY STUDIO</small></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <div class="workspace-card"><div class="workspace-icon">⌘</div><div><strong id="workspace-name">Workspace</strong><small>Codex session</small></div><span class="chevron">⌄</span></div>
+      <div class="nav-label">EXPLORE</div>
+      <nav class="side-nav" aria-label="Replay views">
+        <button class="side-link active" data-view="timeline"><span class="nav-icon">◫</span> Timeline <span class="nav-key">01</span></button>
+        <button class="side-link" data-view="files"><span class="nav-icon">▤</span> Files <span class="nav-key" id="file-count-nav">00</span></button>
+        <button class="side-link" data-view="changes"><span class="nav-icon">⌁</span> Changes <span class="nav-key" id="change-count-nav">00</span></button>
+      </nav>
+      <div class="sidebar-bottom"><div class="live-dot"></div><div><strong>Local & private</strong><span>Replay stays in this file</span></div></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar"><div class="breadcrumbs">WORKSPACE <span>/</span> RUNS <span>/</span> <b id="run-id">SESSION</b></div><div class="top-actions"><span class="status-pill"><i></i><span id="run-status">COMPLETE</span></span><button id="download-btn" class="export-btn" title="Save this standalone HTML file">↓ <span>Export HTML</span></button></div></header>
+
+      <section class="hero">
+        <div class="hero-decoration" aria-hidden="true"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><span class="core">✦</span></div>
+        <div class="eyebrow"><span class="eyebrow-line"></span> AGENT RUN · CODEX</div>
+        <h1 id="run-title">Replay every<br><em>action.</em></h1>
+        <p class="hero-sub" id="run-subtitle">A clear view of what your coding agent saw, ran, and changed.</p>
+        <div class="hero-meta"><span><i class="meta-icon">◷</i> <span id="run-date">—</span></span><span class="meta-separator"></span><span><i class="meta-icon">⌁</i> <span id="run-duration">—</span></span><span class="meta-separator"></span><span><i class="meta-icon">▣</i> Codex</span></div>
+      </section>
+
+      <section class="metrics" aria-label="Run metrics">
+        <div class="metric"><div class="metric-label">COMMANDS <span>↗</span></div><div class="metric-value" id="stat-commands">0</div><div class="metric-caption">executed by agent</div></div>
+        <div class="metric"><div class="metric-label">FILES VIEWED <span>◉</span></div><div class="metric-value" id="stat-viewed">0</div><div class="metric-caption">inferred from commands</div></div>
+        <div class="metric"><div class="metric-label">FILES CHANGED <span>⌁</span></div><div class="metric-value" id="stat-changed">0</div><div class="metric-caption" id="lines-caption">+0 / −0 lines</div></div>
+        <div class="metric"><div class="metric-label">TOTAL TOKENS <span>✳</span></div><div class="metric-value" id="stat-tokens">0</div><div class="metric-caption" id="tokens-caption">input + output</div></div>
+      </section>
+
+      <section class="content-section">
+        <div class="section-heading"><div><div class="section-kicker">THE RUN, FRAME BY FRAME</div><h2 id="section-title">Activity timeline</h2></div><div class="event-counter" id="event-counter">0 EVENTS</div></div>
+        <div id="timeline-view">
+          <div class="toolbar"><div class="filter-tabs" role="group" aria-label="Filter events"><button class="filter active" data-filter="all">All events</button><button class="filter" data-filter="command">Commands</button><button class="filter" data-filter="change">Changes</button><button class="filter" data-filter="message">Messages</button></div><label class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search activity" aria-label="Search activity"><kbd>⌕</kbd></label></div>
+          <div class="playback"><button id="play-btn" class="play-button" aria-label="Play replay">▶</button><div class="playback-info"><strong id="playback-label">Replay run</strong><span id="playback-position">0 / 0 events</span></div><input id="scrubber" type="range" min="0" max="0" value="0" aria-label="Replay position"><button id="step-btn" class="step-button" aria-label="Next event">⏭</button></div>
+          <div class="timeline-list" id="timeline-list"></div>
+        </div>
+        <div id="files-view" class="secondary-view" hidden><p class="view-intro">Files the agent likely opened or searched. This list is inferred from command text and may miss reads through other tools.</p><div id="files-list" class="file-list"></div></div>
+        <div id="changes-view" class="secondary-view" hidden><p class="view-intro">Workspace differences captured between the start and end of this run.</p><div id="changes-list" class="change-list"></div></div>
+      </section>
+      <footer>AGENTLENS <span>·</span> A clearer way to inspect agent work <span>·</span> <a href="https://github.com/fang520huang-lgtm/AgentLens">View on GitHub ↗</a></footer>
+    </main>
+
+    <aside class="inspector"><div class="inspector-head"><span>INSPECTOR</span><span class="inspector-dots">•••</span></div><div id="inspector-content"></div><div class="inspector-footer"><span class="kbd-tip">TIP</span> Click an event to inspect it</div></aside>
+  </div>
+  <script id="session-data" type="application/json">/*__DATA__*/</script>
+  <script>/*__APP__*/</script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+{
+  "version": 1,
+  "id": "demo-cache-fix",
+  "agent": "codex",
+  "prompt": "Fix cache invalidation and add a regression test",
+  "cwd": "/workspace/atlas",
+  "startedAt": "2026-09-17T10:42:15.000Z",
+  "endedAt": "2026-09-17T10:43:04.000Z",
+  "exitCode": 0,
+  "demo": true,
+  "threadId": "demo-agentlens-2026",
+  "durationMs": 49000,
+  "usage": {
+    "input_tokens": 12480,
+    "cached_input_tokens": 5942,
+    "output_tokens": 1876,
+    "reasoning_output_tokens": 1124
+  },
+  "stats": {
+    "commands": 4,
+    "filesViewed": 1,
+    "filesChanged": 2,
+    "additions": 13,
+    "deletions": 2
+  },
+  "viewedFiles": [
+    "src/cache.ts"
+  ],
+  "changes": [
+    {
+      "path": "src/cache.ts",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 2,
+      "diff": "--- a/src/cache.ts\n+++ b/src/cache.ts\n@@ -1,5 +1,8 @@\n export function getCached(key: string) {\n-  return store.get(key);\n+  const entry = store.get(key);\n+  if (!entry || entry.expiresAt < Date.now()) {\n+    store.delete(key);\n+    return undefined;\n+  }\n+  return entry.value;\n }"
+    },
+    {
+      "path": "tests/cache.test.ts",
+      "status": "modified",
+      "additions": 8,
+      "deletions": 0,
+      "diff": "--- a/tests/cache.test.ts\n+++ b/tests/cache.test.ts\n@@ -8,3 +8,11 @@\n describe(\"cache\", () => {\n+  it(\"expires stale entries\", () => {\n+    setCached(\"a\", 1, -1);\n+    expect(getCached(\"a\")).toBeUndefined();\n+  });\n+  it(\"invalidates by key\", () => {\n+    setCached(\"a\", 1, 100);\n+    invalidate(\"a\");\n+    expect(getCached(\"a\")).toBeUndefined();\n+  });\n });"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "cmd1",
+      "at": "2026-09-17T10:42:18.000Z",
+      "kind": "command",
+      "title": "Command executed",
+      "detail": "",
+      "command": "rg --files src tests",
+      "output": "src/cache.ts\nsrc/client.ts\ntests/cache.test.ts",
+      "exitCode": 0,
+      "files": [],
+      "changes": [],
+      "status": "completed"
+    },
+    {
+      "id": "cmd2",
+      "at": "2026-09-17T10:42:22.000Z",
+      "kind": "command",
+      "title": "Command executed",
+      "detail": "",
+      "command": "cat src/cache.ts",
+      "output": "export function getCached(key: string) {\n  return store.get(key);\n}",
+      "exitCode": 0,
+      "files": [
+        "src/cache.ts"
+      ],
+      "changes": [],
+      "status": "completed"
+    },
+    {
+      "id": "cmd3",
+      "at": "2026-09-17T10:42:25.000Z",
+      "kind": "command",
+      "title": "Command executed",
+      "detail": "",
+      "command": "rg \"getCached|invalidate\" src tests",
+      "output": "src/cache.ts:4:export function getCached(key: string)\ntests/cache.test.ts:12:expect(getCached(\"a\"))",
+      "exitCode": 0,
+      "files": [],
+      "changes": [],
+      "status": "completed"
+    },
+    {
+      "id": "edit1",
+      "at": "2026-09-17T10:42:32.000Z",
+      "kind": "change",
+      "title": "Code changed",
+      "detail": "",
+      "command": "",
+      "output": "",
+      "files": [
+        "src/cache.ts"
+      ],
+      "changes": [
+        {
+          "path": "src/cache.ts",
+          "kind": "update"
+        }
+      ],
+      "status": "completed"
+    },
+    {
+      "id": "edit2",
+      "at": "2026-09-17T10:42:39.000Z",
+      "kind": "change",
+      "title": "Code changed",
+      "detail": "",
+      "command": "",
+      "output": "",
+      "files": [
+        "tests/cache.test.ts"
+      ],
+      "changes": [
+        {
+          "path": "tests/cache.test.ts",
+          "kind": "update"
+        }
+      ],
+      "status": "completed"
+    },
+    {
+      "id": "cmd4",
+      "at": "2026-09-17T10:42:45.000Z",
+      "kind": "command",
+      "title": "Command executed",
+      "detail": "",
+      "command": "npm test -- --runInBand",
+      "output": "PASS tests/cache.test.ts\n  ✓ expires stale entries\n  ✓ invalidates by key\n\nTests: 2 passed, 2 total",
+      "exitCode": 0,
+      "files": [],
+      "changes": [],
+      "status": "completed"
+    },
+    {
+      "id": "msg1",
+      "at": "2026-09-17T10:43:00.000Z",
+      "kind": "message",
+      "title": "Agent response",
+      "detail": "Fixed cache invalidation and added regression coverage. Both tests pass.",
+      "command": "",
+      "output": "",
+      "files": [],
+      "changes": [],
+      "status": "completed"
+    }
+  ]
+}

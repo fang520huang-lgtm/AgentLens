@@ -1,0 +1,14 @@
+{
+  "name": "agentlens",
+  "version": "0.1.0",
+  "description": "Record and replay AI coding agent runs as a shareable timeline",
+  "type": "module",
+  "bin": { "agentlens": "./bin/agentlens.js" },
+  "scripts": {
+    "test": "node --test",
+    "demo": "node ./scripts/build-demo.js"
+  },
+  "engines": { "node": ">=20" },
+  "license": "MIT",
+  "files": ["bin", "src", "README.md", "LICENSE"]
+}
