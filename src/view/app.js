@@ -63,6 +63,7 @@
       if (event.code === 'Space') { event.preventDefault(); togglePlayback(); }
     });
     renderTimeline(); renderFiles(); renderChanges();
+    setView('timeline');
     selectPosition(0, false);
   }
 

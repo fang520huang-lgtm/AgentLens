@@ -2,9 +2,17 @@
 
 **A replay button for AI coding agents.** See what Codex likely read, ran, and changed, with token usage and capture coverage in one local timeline. Export a redacted, standalone HTML artifact for a PR or teammate.
 
-![AgentLens timeline replay](docs/demo.gif)
+![AgentLens timeline overview](docs/screenshots/timeline.png)
 
 [Live demo](https://fang520huang-lgtm.github.io/AgentLens/) · [Session schema](docs/session-schema.md) · [中文说明](#中文说明)
+
+**Inspect a command and its output**
+
+![AgentLens command inspector](docs/screenshots/command-detail.png)
+
+**Review the code changes**
+
+![AgentLens code changes](docs/screenshots/code-changes.png)
 
 ## Quick start
 
@@ -62,6 +70,8 @@ npm run demo
 ```
 
 CI runs the same synthetic JSONL fixture and export checks on Ubuntu, macOS, and Windows. The [public demo](https://fang520huang-lgtm.github.io/AgentLens/) uses a synthetic sample run. AgentLens records Codex only; it does not run its own agent model.
+
+To refresh the README screenshots, run `npm run demo` and then `python scripts/capture-demo.py` (requires Playwright and Chrome).
 
 ## 中文说明
 

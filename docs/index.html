@@ -89,7 +89,7 @@
     $('run-status').textContent = ({ completed: 'COMPLETE', interrupted: 'INTERRUPTED', recovered: 'RECOVERED', failed: 'FAILED' })[session.outcome] ?? (session.exitCode === 0 || session.exitCode === undefined ? 'COMPLETE' : 'FAILED');
     $('share-mode').textContent = session.redaction?.mode === 'redacted' ? 'SHARE SAFE' : 'RAW';
     $('share-mode').classList.toggle('safe', session.redaction?.mode === 'redacted');
-    $('share-mode').title = session.redaction?.mode === 'redacted' ? 'Pattern-based redaction. Review before sharing.' : 'This local replay contains original commands, outputs, and code.';
+    $('share-mode').title = session.redaction?.mode === 'redacted' ? `${session.redaction.count ?? 0} redaction matches. Review before sharing.` : 'This local replay contains original commands, outputs, and code.';
     $('run-title').innerHTML = 'Replay every<br><em>captured action.</em>';
     $('run-subtitle').textContent = session.prompt || 'A clear view of what your coding agent saw, ran, and changed.';
     $('run-date').textContent = session.startedAt ? new Date(session.startedAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : 'Sample run';
@@ -130,6 +130,7 @@
       if (event.code === 'Space') { event.preventDefault(); togglePlayback(); }
     });
     renderTimeline(); renderFiles(); renderChanges();
+    setView('timeline');
     selectPosition(0, false);
   }
 
