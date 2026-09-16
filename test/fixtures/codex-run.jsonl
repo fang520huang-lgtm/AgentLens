@@ -1,0 +1,4 @@
+{"at":"2026-01-01T00:00:00.000Z","event":{"type":"thread.started","thread_id":"fixture-thread"}}
+{"at":"2026-01-01T00:00:01.000Z","event":{"type":"item.started","item":{"id":"cmd-1","type":"command_execution","command":"Get-Content -LiteralPath 'src/中文 文件.ts'"}}}
+{"at":"2026-01-01T00:00:02.000Z","event":{"type":"item.completed","item":{"id":"cmd-1","type":"command_execution","aggregated_output":"export const answer = 42;","exit_code":0}}}
+{"at":"2026-01-01T00:00:03.000Z","event":{"type":"turn.completed","usage":{"input_tokens":123,"cached_input_tokens":40,"output_tokens":17,"reasoning_output_tokens":5}}}

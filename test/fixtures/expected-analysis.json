@@ -1,0 +1,8 @@
+{
+  "threadId": "fixture-thread",
+  "commands": 1,
+  "inputTokens": 123,
+  "outputTokens": 17,
+  "command": "Get-Content -LiteralPath 'src/中文 文件.ts'",
+  "output": "export const answer = 42;"
+}

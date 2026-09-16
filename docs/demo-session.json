@@ -1,5 +1,36 @@
 {
-  "version": 1,
+  "schemaVersion": 1,
+  "agentlensVersion": "0.1.0",
+  "outcome": "completed",
+  "model": "demo-model",
+  "codexVersion": "synthetic",
+  "gitCommit": null,
+  "dirtyBefore": false,
+  "dirtyAfter": true,
+  "sandbox": "workspace-write",
+  "platform": {
+    "os": "linux",
+    "arch": "x64"
+  },
+  "captureCoverage": {
+    "status": "captured",
+    "before": {
+      "captured": 42,
+      "skipped": 1,
+      "bytes": 113512,
+      "skippedReasons": {
+        "binary": 1
+      }
+    },
+    "after": {
+      "captured": 42,
+      "skipped": 1,
+      "bytes": 113690,
+      "skippedReasons": {
+        "binary": 1
+      }
+    }
+  },
   "id": "demo-cache-fix",
   "agent": "codex",
   "prompt": "Fix cache invalidation and add a regression test",

@@ -15,7 +15,6 @@ function fileList(cwd) {
   } catch {
     const found = [];
     function visit(dir) {
-      if (found.length >= COUNT_LIMIT) return;
       for (const entry of readdirSync(dir, { withFileTypes: true })) {
         if (OMIT.has(entry.name)) continue;
         const full = join(dir, entry.name);
@@ -28,23 +27,27 @@ function fileList(cwd) {
   }
 }
 
-export function takeSnapshot(cwd) {
+export function takeSnapshot(cwd, { excludePaths = [] } = {}) {
   const files = new Map();
   let total = 0;
-  let skipped = 0;
+  const skippedReasons = { countLimit: 0, fileSize: 0, totalSize: 0, binary: 0, unreadable: 0 };
+  const excluded = excludePaths.map(path => relative(cwd, resolve(path)).replaceAll('\\', '/')).filter(path => path && path !== '..' && !path.startsWith('../'));
   for (const path of fileList(cwd).sort()) {
-    if (files.size >= COUNT_LIMIT) { skipped++; continue; }
+    const normalized = path.replaceAll('\\', '/');
+    if (excluded.some(prefix => normalized === prefix || normalized.startsWith(`${prefix}/`))) continue;
+    if (files.size >= COUNT_LIMIT) { skippedReasons.countLimit++; continue; }
     try {
       const full = resolve(cwd, path);
       const size = statSync(full).size;
-      if (size > FILE_LIMIT || total + size > TOTAL_LIMIT) { skipped++; continue; }
+      if (size > FILE_LIMIT) { skippedReasons.fileSize++; continue; }
+      if (total + size > TOTAL_LIMIT) { skippedReasons.totalSize++; continue; }
       const data = readFileSync(full);
-      if (data.includes(0)) { skipped++; continue; }
-      files.set(path.replaceAll('\\', '/'), data);
+      if (data.includes(0)) { skippedReasons.binary++; continue; }
+      files.set(normalized, data);
       total += data.length;
-    } catch { skipped++; }
+    } catch { skippedReasons.unreadable++; }
   }
-  return { files, skipped };
+  return { files, captured: files.size, skipped: Object.values(skippedReasons).reduce((sum, count) => sum + count, 0), skippedReasons, bytes: total };
 }
 
 function patchFor(path, before, after) {

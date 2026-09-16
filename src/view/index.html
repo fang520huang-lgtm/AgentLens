@@ -26,12 +26,12 @@
     </aside>
 
     <main class="main-content">
-      <header class="topbar"><div class="breadcrumbs">WORKSPACE <span>/</span> RUNS <span>/</span> <b id="run-id">SESSION</b></div><div class="top-actions"><span class="status-pill"><i></i><span id="run-status">COMPLETE</span></span><button id="download-btn" class="export-btn" title="Save this standalone HTML file">↓ <span>Export HTML</span></button></div></header>
+      <header class="topbar"><div class="breadcrumbs">WORKSPACE <span>/</span> RUNS <span>/</span> <b id="run-id">SESSION</b></div><div class="top-actions"><span class="share-pill" id="share-mode">RAW</span><span class="status-pill"><i></i><span id="run-status">COMPLETE</span></span><button id="download-btn" class="export-btn" title="Download a redacted HTML replay">↓ <span>Export HTML</span></button></div></header>
 
       <section class="hero">
         <div class="hero-decoration" aria-hidden="true"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><span class="core">✦</span></div>
         <div class="eyebrow"><span class="eyebrow-line"></span> AGENT RUN · CODEX</div>
-        <h1 id="run-title">Replay every<br><em>action.</em></h1>
+        <h1 id="run-title">Replay every<br><em>captured action.</em></h1>
         <p class="hero-sub" id="run-subtitle">A clear view of what your coding agent saw, ran, and changed.</p>
         <div class="hero-meta"><span><i class="meta-icon">◷</i> <span id="run-date">—</span></span><span class="meta-separator"></span><span><i class="meta-icon">⌁</i> <span id="run-duration">—</span></span><span class="meta-separator"></span><span><i class="meta-icon">▣</i> Codex</span></div>
       </section>
@@ -42,6 +42,7 @@
         <div class="metric"><div class="metric-label">FILES CHANGED <span>⌁</span></div><div class="metric-value" id="stat-changed">0</div><div class="metric-caption" id="lines-caption">+0 / −0 lines</div></div>
         <div class="metric"><div class="metric-label">TOTAL TOKENS <span>✳</span></div><div class="metric-value" id="stat-tokens">0</div><div class="metric-caption" id="tokens-caption">input + output</div></div>
       </section>
+      <div class="coverage-bar"><span class="coverage-label">CAPTURE COVERAGE</span><strong id="coverage-summary">—</strong><span class="coverage-note" id="coverage-note">Workspace text snapshot</span></div>
 
       <section class="content-section">
         <div class="section-heading"><div><div class="section-kicker">THE RUN, FRAME BY FRAME</div><h2 id="section-title">Activity timeline</h2></div><div class="event-counter" id="event-counter">0 EVENTS</div></div>
@@ -59,6 +60,7 @@
     <aside class="inspector" id="inspector"><div class="inspector-head"><span>INSPECTOR</span><span class="inspector-dots">•••</span><button class="inspector-close" id="inspector-close" aria-label="Close inspector">✕</button></div><div id="inspector-content"></div><div class="inspector-footer"><span class="kbd-tip">TIP</span> Click an event to inspect it</div></aside>
   </div>
   <script id="session-data" type="application/json">/*__DATA__*/</script>
+  <script id="share-html" type="application/octet-stream">/*__SHARE_HTML__*/</script>
   <script>/*__APP__*/</script>
 </body>
 </html>

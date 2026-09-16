@@ -19,8 +19,11 @@
     const workspace = (session.cwd ?? 'Workspace').replaceAll('\\', '/').split('/').filter(Boolean).at(-1);
     $('workspace-name').textContent = workspace || 'Workspace';
     $('run-id').textContent = (session.threadId ?? session.id ?? 'SESSION').slice(0, 10).toUpperCase();
-    $('run-status').textContent = session.exitCode === 0 || session.exitCode === undefined ? 'COMPLETE' : 'FAILED';
-    $('run-title').innerHTML = 'Replay every<br><em>action.</em>';
+    $('run-status').textContent = ({ completed: 'COMPLETE', interrupted: 'INTERRUPTED', recovered: 'RECOVERED', failed: 'FAILED' })[session.outcome] ?? (session.exitCode === 0 || session.exitCode === undefined ? 'COMPLETE' : 'FAILED');
+    $('share-mode').textContent = session.redaction?.mode === 'redacted' ? 'SHARE SAFE' : 'RAW';
+    $('share-mode').classList.toggle('safe', session.redaction?.mode === 'redacted');
+    $('share-mode').title = session.redaction?.mode === 'redacted' ? `${session.redaction.count ?? 0} redaction matches. Review before sharing.` : 'This local replay contains original commands, outputs, and code.';
+    $('run-title').innerHTML = 'Replay every<br><em>captured action.</em>';
     $('run-subtitle').textContent = session.prompt || 'A clear view of what your coding agent saw, ran, and changed.';
     $('run-date').textContent = session.startedAt ? new Date(session.startedAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : 'Sample run';
     $('run-duration').textContent = formatDuration(session.durationMs ?? 0);
@@ -30,6 +33,14 @@
     $('stat-tokens').textContent = formatNumber((session.usage?.input_tokens ?? 0) + (session.usage?.output_tokens ?? 0));
     $('lines-caption').textContent = `+${formatNumber(session.stats?.additions)} / −${formatNumber(session.stats?.deletions)} lines`;
     $('tokens-caption').textContent = `${formatNumber(session.usage?.input_tokens)} in · ${formatNumber(session.usage?.output_tokens)} out`;
+    const coverage = session.captureCoverage;
+    if (coverage?.status === 'captured') {
+      $('coverage-summary').textContent = `${formatNumber(coverage.after?.captured)} files captured · ${formatNumber(coverage.after?.skipped)} skipped`;
+      $('coverage-note').textContent = `At start: ${formatNumber(coverage.before?.captured)} captured · ${formatNumber(coverage.before?.skipped)} skipped`;
+    } else {
+      $('coverage-summary').textContent = 'Workspace snapshot unavailable';
+      $('coverage-note').textContent = session.outcome === 'recovered' ? 'Replay rebuilt from saved events; patch may be incomplete' : 'Capture data not provided';
+    }
     $('file-count-nav').textContent = String(session.viewedFiles?.length ?? 0).padStart(2, '0');
     $('change-count-nav').textContent = String(session.changes?.length ?? 0).padStart(2, '0');
     $('scrubber').max = Math.max(0, events.length - 1);
@@ -193,7 +204,9 @@
   }
 
   function download() {
-    const blob = new Blob(['<!doctype html>\n' + document.documentElement.outerHTML], { type: 'text/html;charset=utf-8' });
+    const encoded = $('share-html').textContent.trim();
+    const bytes = encoded ? Uint8Array.from(atob(encoded), char => char.charCodeAt(0)) : new TextEncoder().encode('<!doctype html>\n' + document.documentElement.outerHTML);
+    const blob = new Blob([bytes], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = make('a'); link.href = url; link.download = `agentlens-${session.id ?? 'replay'}.html`;
     document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);

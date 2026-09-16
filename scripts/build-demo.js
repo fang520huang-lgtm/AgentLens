@@ -31,8 +31,15 @@ const changes = [
 ];
 const demo = analyze(raw, changes, {
   id: 'demo-cache-fix', agent: 'codex', prompt: 'Fix cache invalidation and add a regression test',
-  cwd: '/workspace/atlas', startedAt: at(0), endedAt: at(49), exitCode: 0, demo: true
+  cwd: '/workspace/atlas', startedAt: at(0), endedAt: at(49), exitCode: 0, demo: true,
+  model: 'demo-model', codexVersion: 'synthetic', sandbox: 'workspace-write',
+  platform: { os: 'linux', arch: 'x64' }, gitCommit: null, dirtyBefore: false, dirtyAfter: true,
+  captureCoverage: {
+    status: 'captured',
+    before: { captured: 42, skipped: 1, bytes: 113512, skippedReasons: { binary: 1 } },
+    after: { captured: 42, skipped: 1, bytes: 113690, skippedReasons: { binary: 1 } }
+  }
 });
 writeFileSync(join(docs, 'demo-session.json'), JSON.stringify(demo, null, 2) + '\n');
-writeHtml(demo, join(docs, 'index.html'));
+writeHtml(demo, join(docs, 'index.html'), { mode: 'redacted' });
 console.log(`Built demo at ${join(docs, 'index.html')}`);

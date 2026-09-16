@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+
+const AGENTLENS_VERSION = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
 const READ_COMMAND = /\b(?:cat|head|tail|sed|rg|grep|findstr|type|Get-Content|Select-String|less|more|git\s+show|ReadAllText|readFileSync|readFile)\b/i;
 const FILE_NAME = /(?:\.[a-z\d]{1,12}|^(?:README|LICENSE|Dockerfile|Makefile|AGENTS\.md)$)/i;
 
@@ -5,7 +8,9 @@ export function inferViewedFiles(command = '') {
   const read = READ_COMMAND.exec(command);
   if (!read) return [];
   const tail = command.slice(read.index + read[0].length);
-  const matches = tail.match(/[A-Za-z0-9_./\\-]+\.[A-Za-z0-9]{1,12}\b/g) ?? [];
+  const quoted = [...tail.matchAll(/['"]([^'"\r\n]+\.[A-Za-z0-9]{1,12})['"]/g)].map(match => match[1]);
+  const unquoted = tail.match(/[\p{L}\p{N}_.\/\\-]+\.[A-Za-z0-9]{1,12}\b/gu) ?? [];
+  const matches = [...quoted, ...unquoted.filter(token => !quoted.some(path => path.includes(token)))];
   return [...new Set(matches.map(token => token.replace(/^[.][\\/]/, '')).filter(token =>
     token.length < 220 && FILE_NAME.test(token) && !/\.(?:exe|dll|ps1|cmd|bat)$/i.test(token)
   ))];
@@ -79,7 +84,11 @@ export function analyze(rawEvents, changes, meta = {}) {
   timeline.sort((a, b) => Date.parse(a.at) - Date.parse(b.at));
   const durationMs = Math.max(0, Date.parse(meta.endedAt ?? '') - Date.parse(meta.startedAt ?? '')) || 0;
   return {
-    version: 1, ...meta, threadId, durationMs, usage,
+    schemaVersion: 1, agentlensVersion: AGENTLENS_VERSION, outcome: 'completed',
+    model: null, codexVersion: null, gitCommit: null, dirtyBefore: null, dirtyAfter: null,
+    sandbox: null, platform: { os: 'unknown', arch: 'unknown' },
+    captureCoverage: { status: 'unavailable', before: null, after: null },
+    ...meta, threadId, durationMs, usage,
     stats: {
       commands: timeline.filter(item => item.kind === 'command').length,
       filesViewed: viewed.size, filesChanged: changes.length,

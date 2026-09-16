@@ -10,5 +10,5 @@
   },
   "engines": { "node": ">=20" },
   "license": "MIT",
-  "files": ["bin", "src", "README.md", "LICENSE"]
+  "files": ["bin", "src", "schema", "README.md", "LICENSE"]
 }

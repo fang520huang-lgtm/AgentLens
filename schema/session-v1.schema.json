@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/fang520huang-lgtm/AgentLens/blob/main/schema/session-v1.schema.json",
+  "title": "AgentLens session artifact v1",
+  "type": "object",
+  "required": ["schemaVersion", "agentlensVersion", "id", "agent", "startedAt", "endedAt", "outcome", "timeline", "changes", "viewedFiles", "usage", "stats", "captureCoverage"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "agentlensVersion": { "type": "string" },
+    "id": { "type": "string" },
+    "agent": { "const": "codex" },
+    "threadId": { "type": ["string", "null"] },
+    "prompt": { "type": "string" },
+    "cwd": { "type": "string" },
+    "startedAt": { "type": "string", "format": "date-time" },
+    "endedAt": { "type": "string", "format": "date-time" },
+    "durationMs": { "type": "number", "minimum": 0 },
+    "outcome": { "enum": ["completed", "failed", "interrupted", "recovered"] },
+    "exitCode": { "type": ["integer", "null"] },
+    "model": { "type": ["string", "null"] },
+    "codexVersion": { "type": ["string", "null"] },
+    "platform": {
+      "type": "object",
+      "required": ["os", "arch"],
+      "properties": { "os": { "type": "string" }, "arch": { "type": "string" } },
+      "additionalProperties": true
+    },
+    "gitCommit": { "type": ["string", "null"] },
+    "dirtyBefore": { "type": ["boolean", "null"] },
+    "dirtyAfter": { "type": ["boolean", "null"] },
+    "sandbox": { "type": ["string", "null"] },
+    "captureCoverage": {
+      "type": "object",
+      "required": ["status", "before", "after"],
+      "properties": {
+        "status": { "enum": ["captured", "unavailable"] },
+        "before": { "$ref": "#/$defs/snapshotOrNull" },
+        "after": { "$ref": "#/$defs/snapshotOrNull" }
+      },
+      "additionalProperties": true
+    },
+    "usage": {
+      "type": "object",
+      "required": ["input_tokens", "cached_input_tokens", "output_tokens", "reasoning_output_tokens"],
+      "properties": {
+        "input_tokens": { "type": "number", "minimum": 0 },
+        "cached_input_tokens": { "type": "number", "minimum": 0 },
+        "output_tokens": { "type": "number", "minimum": 0 },
+        "reasoning_output_tokens": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "stats": {
+      "type": "object",
+      "required": ["commands", "filesViewed", "filesChanged", "additions", "deletions"],
+      "properties": {
+        "commands": { "type": "integer", "minimum": 0 },
+        "filesViewed": { "type": "integer", "minimum": 0 },
+        "filesChanged": { "type": "integer", "minimum": 0 },
+        "additions": { "type": "integer", "minimum": 0 },
+        "deletions": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "viewedFiles": { "type": "array", "items": { "type": "string" } },
+    "changes": { "type": "array", "items": { "$ref": "#/$defs/change" } },
+    "timeline": { "type": "array", "items": { "$ref": "#/$defs/event" } },
+    "redaction": { "type": "object" },
+    "recovery": { "type": "object" }
+  },
+  "$defs": {
+    "snapshotOrNull": { "anyOf": [{ "type": "null" }, { "$ref": "#/$defs/snapshot" }] },
+    "snapshot": {
+      "type": "object",
+      "required": ["captured", "skipped", "bytes"],
+      "properties": {
+        "captured": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 },
+        "bytes": { "type": "integer", "minimum": 0 },
+        "skippedReasons": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } }
+      },
+      "additionalProperties": true
+    },
+    "change": {
+      "type": "object",
+      "required": ["path", "status", "diff", "additions", "deletions"],
+      "properties": {
+        "path": { "type": "string" },
+        "status": { "enum": ["added", "modified", "deleted"] },
+        "diff": { "type": "string" },
+        "additions": { "type": "integer", "minimum": 0 },
+        "deletions": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "event": {
+      "type": "object",
+      "required": ["id", "at", "kind", "title"],
+      "properties": {
+        "id": { "type": "string" },
+        "at": { "type": "string", "format": "date-time" },
+        "kind": { "enum": ["command", "change", "message", "tool", "error", "other"] },
+        "title": { "type": "string" },
+        "detail": { "type": "string" },
+        "command": { "type": "string" },
+        "output": { "type": "string" },
+        "files": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
