@@ -39,6 +39,15 @@ with TemporaryDirectory() as temp, sync_playwright() as playwright:
     page.locator('[data-view="timeline"]').click()
     page.locator(".event-card").nth(5).click()
     capture("05-test")
+    mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
+    mobile.goto(URL)
+    mobile.locator(".event-card").first.click()
+    assert "open" in mobile.locator("#inspector").get_attribute("class")
+    mobile.locator("#inspector-close").click()
+    assert "open" not in mobile.locator("#inspector").get_attribute("class")
+    mobile.locator('[data-view="changes"]').click()
+    mobile.locator(".change-row").first.click()
+    assert "open" in mobile.locator("#inspector").get_attribute("class")
     browser.close()
 
 palette_frames = [frame.quantize(colors=128, method=Image.Quantize.FASTOCTREE) for frame in shots]

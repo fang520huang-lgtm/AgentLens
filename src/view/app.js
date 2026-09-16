@@ -42,7 +42,8 @@
     $('search-input').addEventListener('input', event => { state.query = event.target.value.toLowerCase(); renderTimeline(); });
     $('play-btn').addEventListener('click', togglePlayback);
     $('step-btn').addEventListener('click', () => step(1));
-    $('scrubber').addEventListener('input', event => selectPosition(Number(event.target.value)));
+    $('scrubber').addEventListener('input', event => selectPosition(Number(event.target.value), true));
+    $('inspector-close').addEventListener('click', () => $('inspector').classList.remove('open'));
     $('download-btn').addEventListener('click', download);
     document.addEventListener('keydown', event => {
       if (event.target.matches('input')) return;
@@ -51,11 +52,12 @@
       if (event.code === 'Space') { event.preventDefault(); togglePlayback(); }
     });
     renderTimeline(); renderFiles(); renderChanges();
-    selectPosition(0);
+    selectPosition(0, false);
   }
 
   function setView(view) {
     state.view = view;
+    $('inspector').classList.remove('open');
     document.querySelectorAll('.side-link').forEach(button => button.classList.toggle('active', button.dataset.view === view));
     $('timeline-view').hidden = view !== 'timeline';
     $('files-view').hidden = view !== 'files';
@@ -89,19 +91,20 @@
     });
   }
 
-  function selectEvent(item) {
+  function selectEvent(item, reveal = true) {
     state.selected = item.id;
     state.position = events.findIndex(event => event.id === item.id);
     $('scrubber').value = Math.max(0, state.position);
     $('playback-position').textContent = `${events.length ? state.position + 1 : 0} / ${events.length} events`;
     document.querySelectorAll('.event-card').forEach(card => card.classList.toggle('active', card.dataset.id === item.id));
     renderInspector(item);
+    if (reveal && window.matchMedia('(max-width: 1250px)').matches) $('inspector').classList.add('open');
   }
 
-  function selectPosition(index) {
+  function selectPosition(index, reveal = false) {
     if (!events.length) { renderInspector(null); return; }
     const bounded = Math.min(Math.max(index, 0), events.length - 1);
-    selectEvent(events[bounded]);
+    selectEvent(events[bounded], reveal);
     const card = [...document.querySelectorAll('.event-card')].find(node => node.dataset.id === events[bounded].id);
     card?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
@@ -179,15 +182,11 @@
       const stat = make('span', 'diff-stat'); stat.append(make('span', 'plus', `+${change.additions}`), document.createTextNode('  '), make('span', 'minus', `−${change.deletions}`));
       row.append(make('span', 'file-icon', '⌁'), text, stat);
       row.addEventListener('click', () => {
-        if (window.matchMedia('(max-width: 1250px)').matches) {
-          const popup = window.open('', '_blank');
-          if (popup) { const pre = popup.document.createElement('pre'); pre.textContent = change.diff; popup.document.body.append(pre); }
-        } else {
-          const container = $('inspector-content'); container.replaceChildren();
-          const body = make('div', 'inspector-body');
-          body.append(make('div', 'inspector-icon', '⌁'), make('div', 'inspector-kicker', 'Workspace diff'), make('h3', '', change.path), make('p', 'inspector-description', `${change.status} · +${change.additions} / −${change.deletions} lines`), make('div', 'inspector-divider'));
-          code(body, 'PATCH', change.diff, true); container.append(body);
-        }
+        const container = $('inspector-content'); container.replaceChildren();
+        const body = make('div', 'inspector-body');
+        body.append(make('div', 'inspector-icon', '⌁'), make('div', 'inspector-kicker', 'Workspace diff'), make('h3', '', change.path), make('p', 'inspector-description', `${change.status} · +${change.additions} / −${change.deletions} lines`), make('div', 'inspector-divider'));
+        code(body, 'PATCH', change.diff, true); container.append(body);
+        if (window.matchMedia('(max-width: 1250px)').matches) $('inspector').classList.add('open');
       });
       list.append(row);
     });
