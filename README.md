@@ -2,17 +2,11 @@
 
 **A replay button for AI coding agents.** See what Codex likely read, ran, and changed, then compare two runs to find where they diverged. Export a redacted, standalone HTML artifact for a PR or teammate.
 
-![AgentLens timeline overview](docs/screenshots/timeline.png)
+![AgentLens six-second walkthrough from Codex run to share-safe export](docs/demo-walkthrough.gif)
 
-[Replay demo](https://fang520huang-lgtm.github.io/AgentLens/) · [Run A vs Run B demo](https://fang520huang-lgtm.github.io/AgentLens/compare.html) · [Session schema](docs/session-schema.md) · [中文说明](#中文说明)
+*Six-second synthetic walkthrough: Codex runs → timeline appears → inspect command output → review the diff → export share-safe HTML.*
 
-**Inspect a command and its output**
-
-![AgentLens command inspector](docs/screenshots/command-detail.png)
-
-**Review the code changes**
-
-![AgentLens code changes](docs/screenshots/code-changes.png)
+[Replay demo](https://fang520huang-lgtm.github.io/AgentLens/) · [Run A vs Run B demo](https://fang520huang-lgtm.github.io/AgentLens/compare.html) · [Static screenshots](#replay-screenshots) · [Session schema](docs/session-schema.md) · [中文说明](#中文说明)
 
 ## Quick start
 
@@ -31,6 +25,20 @@ agentlens replay .agentlens/runs/<id>
 agentlens export .agentlens/runs/<id> --out agent-run.html
 agentlens compare .agentlens/runs/run-a .agentlens/runs/run-b
 ```
+
+## Replay screenshots
+
+**Timeline overview**
+
+![AgentLens timeline overview](docs/screenshots/timeline.png)
+
+**Inspect a command and its output**
+
+![AgentLens command inspector](docs/screenshots/command-detail.png)
+
+**Review the code changes**
+
+![AgentLens code changes](docs/screenshots/code-changes.png)
 
 ## Run A vs Run B
 
@@ -90,7 +98,7 @@ npm run demo
 
 CI runs the same synthetic JSONL fixture and export checks on Ubuntu, macOS, and Windows. The [replay demo](https://fang520huang-lgtm.github.io/AgentLens/) and [comparison demo](https://fang520huang-lgtm.github.io/AgentLens/compare.html) use synthetic sample runs. AgentLens records Codex only; it does not run its own agent model.
 
-To refresh the README screenshots, run `npm run demo` and then `python scripts/capture-demo.py` (requires Playwright and Chrome).
+To refresh the README visuals, run `npm run demo`, then `python scripts/capture-demo.py` for static screenshots and `python scripts/capture-walkthrough.py` for the GIF. The latter needs Playwright, Chrome, and ffmpeg or `imageio-ffmpeg`.
 
 ## 中文说明
 
