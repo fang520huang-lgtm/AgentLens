@@ -9,9 +9,10 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const docs = join(root, 'docs');
 mkdirSync(docs, { recursive: true });
 const site = 'https://fang520huang-lgtm.github.io/AgentLens/';
-function addSiteMetadata(file, title, description, canonical) {
+function addSiteMetadata(file, title, description, canonical, verification = '') {
   const html = readFileSync(file, 'utf8');
-  const metadata = `  <title>${title}</title>\n  <meta name="description" content="${description}">\n  <link rel="canonical" href="${canonical}">`;
+  const verificationTag = verification ? `\n  <meta name="google-site-verification" content="${verification}">` : '';
+  const metadata = `  <title>${title}</title>\n  <meta name="description" content="${description}">\n  <link rel="canonical" href="${canonical}">${verificationTag}`;
   const updated = html.replace(/  <title>[^\n]*<\/title>/, metadata);
   if (updated === html) throw new Error(`Could not add site metadata to ${file}`);
   writeFileSync(file, updated);
@@ -55,7 +56,8 @@ addSiteMetadata(
   join(docs, 'index.html'),
   'AgentLens — Replay Codex runs',
   'Replay a captured Codex run as an interactive timeline. Inspect commands, output, file changes, and tokens, then export a share-safe HTML report.',
-  site
+  site,
+  '-2JWeJHYB_qfEYeLL_ATZ_2Mgn0ylvIAW4QkoI_iuLQ'
 );
 
 const failedRaw = [
