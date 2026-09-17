@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c1215">
+  <title>AgentLens — Run A vs Run B</title>
+  <style>:root{color-scheme:dark;font-family:Inter,"Segoe UI",system-ui,sans-serif;background:#0c1215;color:#eef3ed;font-synthesis:none}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 83% 3%,rgba(127,169,93,.09),transparent 28%),#0c1215}button{font:inherit;cursor:pointer}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible{outline:2px solid #c4f486;outline-offset:3px}h1,h2,h3,p{margin-top:0}.page-width{max-width:1450px;margin:0 auto;padding-left:48px;padding-right:48px}.topbar{position:sticky;top:0;z-index:20;height:74px;background:rgba(12,18,21,.94);backdrop-filter:blur(18px);border-bottom:1px solid #273439;display:flex;align-items:center;gap:30px;padding:0 max(32px,calc((100vw - 1354px)/2))}.brand{display:flex;align-items:center;gap:11px;white-space:nowrap;font-size:21px;font-weight:750;letter-spacing:-1.2px;line-height:1}.brand small{display:block;font:650 9px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:2.2px;color:#81918b;margin-top:4px}.brand-accent{color:#c1f184}.brand-mark{width:29px;height:29px;border:2px solid #bff27e;border-radius:8px;position:relative;display:block;transform:rotate(-8deg)}.brand-mark span{position:absolute;left:6px;width:13px;height:2px;background:#bff27e;border-radius:3px}.brand-mark span:nth-child(1){top:7px}.brand-mark span:nth-child(2){top:12px;width:9px}.brand-mark span:nth-child(3){top:17px;width:5px}.top-nav{display:flex;gap:30px;margin:auto;font-size:12px;color:#92a09e}.top-nav a:hover{color:#c4f486}.top-actions{display:flex;align-items:center;gap:12px}.share-pill,.card-kicker,.kicker,.eyebrow,.finding-label,.run-tag,.timeline-head,.context-head,.delta-strip span,.run-stats span,.patch-card-head,.patch-index,.small-button,.timeline-note,.coverage-note,footer{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.share-pill{color:#c6f2a0;border:1px solid #395039;background:#1a2c22;border-radius:6px;padding:7px 9px;font-size:10px;font-weight:750;letter-spacing:1px;white-space:nowrap}.share-pill.raw{color:#ffbc9e;border-color:#664c3d;background:#2b201b}.button{display:inline-flex;align-items:center;justify-content:center;min-height:37px;padding:0 16px;border-radius:8px;font-size:12px;font-weight:750;white-space:nowrap;border:1px solid transparent}.button-primary{background:#c4f486;color:#152017;box-shadow:0 10px 34px rgba(168,222,119,.11)}.button-primary:hover{background:#d4ffa0}.button-outline{background:#182228;border-color:#394b46;color:#d3e2d3}.button-outline:hover{border-color:#b8e57f}.hero{min-height:410px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(330px,.8fr);gap:35px;align-items:center;border-bottom:1px solid #263238;position:relative;overflow:hidden}.hero-copy{padding:66px 0 75px}.eyebrow{display:flex;align-items:center;gap:10px;color:#b7e984;font-size:11px;letter-spacing:1.4px;font-weight:700}.eyebrow-line{width:25px;height:1px;background:#b7e984}.hero h1{font-size:clamp(46px,5vw,76px);line-height:.99;letter-spacing:-4px;font-weight:720;margin:24px 0 22px}.hero h1 em{font-style:normal;color:#c4f486}.hero-copy>p{max-width:570px;color:#94a5a3;font-size:15px;line-height:1.65}.hero-actions{display:flex;gap:10px;margin-top:28px}.hero-fork{height:315px;position:relative;margin-top:20px;border:1px solid #2c3b37;border-radius:22px;background:radial-gradient(circle at 50% 42%,rgba(128,180,93,.18),transparent 31%),linear-gradient(145deg,#192724,#101a1c 60%,#182023);box-shadow:inset 0 0 80px rgba(6,15,13,.3)}.hero-fork:before,.hero-fork:after{content:"";position:absolute;border:1px solid rgba(176,229,133,.15);border-radius:50%;width:190px;height:125px;left:calc(50% - 95px);top:68px;transform:rotate(30deg)}.hero-fork:after{transform:rotate(-42deg)}.fork-start{position:absolute;top:56px;left:50%;transform:translateX(-50%);font:700 11px ui-monospace,Consolas,monospace;letter-spacing:2px;color:#c4f486;z-index:1}.fork-stem{position:absolute;top:84px;left:50%;height:79px;border-left:2px solid #c4f486}.fork-paths{position:absolute;top:160px;left:20%;right:20%;display:grid;grid-template-columns:1fr 1fr;border-top:2px solid #6f9570}.fork-paths:before{content:"";position:absolute;top:-19px;left:50%;height:19px;border-left:2px solid #b9e989}.fork-paths>div{position:relative;text-align:center;padding-top:52px;color:#d9e9d4;font:700 16px ui-monospace,Consolas,monospace}.fork-paths>div:before{content:"";position:absolute;height:43px;top:0;left:50%;border-left:2px solid #bdf288}.fork-paths>div:last-child:before{border-color:#eeaa88}.fork-paths b{display:block;margin:8px auto;width:22px;height:22px;font-size:22px;line-height:20px;color:#c1f184;text-shadow:0 0 25px #a4e06a}.fork-paths>div:last-child b{color:#f3aa8a;text-shadow:0 0 25px #e78e74}.fork-label{position:absolute;bottom:16px;left:0;right:0;text-align:center;font:700 9px ui-monospace,Consolas,monospace;color:#789088;letter-spacing:1.8px}.verdict{padding-top:63px;padding-bottom:40px}.section-intro{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:26px}.section-intro h2{font-size:clamp(27px,2.5vw,38px);letter-spacing:-1.4px;margin:8px 0 0}.section-intro p{max-width:370px;color:#8fa19e;font-size:12px;line-height:1.6;margin:0}.kicker,.card-kicker{color:#b8e883;font-size:10px;letter-spacing:1.5px;font-weight:750}.verdict-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,.55fr);gap:14px}.main-finding,.clues-card,.run-card,.evidence-card,.patch-index,.patch-card,.context-table,.event-detail{border:1px solid #2a3a3b;border-radius:13px;background:#141e21}.main-finding{padding:28px 30px;background:linear-gradient(120deg,#1d3029,#172322 60%,#131d21);border-color:#466447}.finding-label{font-size:10px;color:#bff08b;letter-spacing:1.5px;font-weight:750;display:flex;align-items:center;gap:9px}.pulse-dot{height:8px;width:8px;border-radius:50%;background:#c4f486;box-shadow:0 0 18px #9be569}.main-finding h3{font-size:31px;letter-spacing:-1.2px;margin:18px 0 5px}.muted{color:#95a9a3;font-size:12px;line-height:1.6}.fork-comparison{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:23px}.fork-comparison>div{min-width:0;border:1px solid #365045;background:#142421;padding:16px;border-radius:8px}.fork-comparison strong{display:block;margin-top:10px;font-size:13px;font-weight:650;line-height:1.5;overflow-wrap:anywhere}.run-tag{display:inline-flex;align-items:center;border-radius:4px;padding:5px 6px;font-size:9px;font-weight:800;letter-spacing:1px}.run-tag.a{color:#c7f697;background:#293f2c}.run-tag.b{color:#ffb599;background:#47342d}.text-link{display:inline-block;color:#c5f291;font-size:11px;font-weight:700;margin-top:22px}.text-link:hover{text-decoration:underline}.clues-card{padding:26px}.clues-list{margin-top:16px;display:grid;gap:12px}.clue{display:grid;grid-template-columns:25px 1fr;gap:10px;padding-top:13px;border-top:1px solid #29383a}.clue:first-child{padding-top:0;border-top:0}.clue i{display:grid;place-items:center;width:24px;height:24px;border-radius:6px;background:#293b32;color:#c4ee8c;font-size:12px;font-style:normal}.clue strong{display:block;font-size:12px;line-height:1.35}.clue span{display:block;color:#879a96;font-size:11px;line-height:1.5;margin-top:3px}.run-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.run-card{padding:23px 25px;background:linear-gradient(135deg,#192823,#121b1e)}.run-card.run-b{background:linear-gradient(135deg,#2a211f,#151b1e)}.run-card-head{display:flex;align-items:center;gap:12px}.run-letter{display:grid;place-items:center;width:41px;height:41px;border-radius:9px;background:#bdec86;color:#18251b;font-weight:800;font-size:18px}.run-b .run-letter{background:#f3af8d;color:#312019}.run-card h3{font-size:17px;margin:3px 0 0;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.outcome{margin-left:auto;font:800 10px ui-monospace,Consolas,monospace;letter-spacing:1px;border:1px solid #456645;color:#c5f39b;border-radius:5px;padding:7px}.outcome.failed,.outcome.interrupted{color:#ffb49a;border-color:#744a3b}.run-prompt{border-left:2px solid #476649;padding-left:12px;font-size:12px;color:#b8c8bb;line-height:1.6;margin:19px 0 21px;min-height:38px}.run-b .run-prompt{border-color:#835845}.run-stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #304041;padding-top:18px;gap:10px}.run-stats span{display:block;color:#80938f;font-size:9px;letter-spacing:1px}.run-stats strong{display:block;margin-top:7px;font-size:19px;letter-spacing:-.5px}.delta-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:14px;border:1px solid #2b3c3c;background:#2b3c3c;border-radius:12px;overflow:hidden}.delta-strip>div{padding:19px 21px;background:#142022;min-width:0}.delta-strip span{display:block;color:#829691;font-size:9px;letter-spacing:.8px}.delta-strip strong{display:block;margin:9px 0 2px;font-size:24px;letter-spacing:-.5px}.delta-strip small{color:#748880;font-size:10px}.section{padding-top:70px;padding-bottom:20px;scroll-margin-top:85px}.timeline-toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:14px}.legend{display:flex;gap:19px;color:#8b9e99;font-size:11px}.legend span{display:flex;align-items:center;gap:6px}.legend-dot{display:inline-block;width:7px;height:7px;border-radius:50%}.legend-dot.same{background:#78a48a}.legend-dot.changed{background:#c7f185}.legend-dot.single{background:#f1a887}.small-button{border:1px solid #354b43;background:#1b2b28;color:#c9e6c0;border-radius:6px;padding:8px 10px;font-size:10px;font-weight:700;margin-left:6px}.small-button:hover{border-color:#bcf17e}.timeline-note{color:#80948f;font-size:10px;margin:0 0 10px}.timeline-head{display:grid;grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr);color:#8ca09a;font-size:10px;letter-spacing:1.4px;padding:0 12px 9px;text-align:center}.timeline-head span:first-child{text-align:left}.timeline-head span:last-child{text-align:right}.timeline-rows{border-top:1px solid #324344}.timeline-row{display:grid;grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr);gap:0;align-items:stretch;position:relative}.timeline-row:before{content:"";position:absolute;top:0;bottom:0;left:50%;border-left:1px solid #344b43}.timeline-cell{display:block;min-width:0;text-align:left;border:1px solid #2b3b3b;border-radius:8px;background:#152023;color:#dce7df;padding:12px 14px;margin:5px 0}.timeline-cell:not(.empty):hover,.timeline-row.selected .timeline-cell:not(.empty){border-color:#b3e57d;background:#20302b}.timeline-cell.empty{border-style:dashed;background:#10191b;color:#667d78;cursor:default}.timeline-cell b{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.timeline-cell small{display:block;color:#859b92;margin-top:6px;font:10px ui-monospace,Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.timeline-cell .fail{color:#ffaf94}.timeline-step{position:relative;z-index:1;display:grid;place-items:center;color:#8ca29b;font:700 10px ui-monospace,Consolas,monospace}.timeline-step span{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#1e302d;border:1px solid #4b6e54}.timeline-row.changed .timeline-step span,.timeline-row.first-fork .timeline-step span{color:#142117;background:#c3f288;border-color:#c3f288}.timeline-row.single .timeline-step span{color:#f5b39a;border-color:#91664f}.timeline-row.first-fork:after{content:"FIRST SPLIT";position:absolute;z-index:2;right:calc(50% - 35px);top:-4px;transform:translateY(-50%);background:#c4f486;color:#142015;font:800 8px ui-monospace,Consolas,monospace;letter-spacing:.8px;border-radius:3px;padding:4px 6px}.event-detail{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#2a3a3b;overflow:hidden;margin-top:17px}.event-detail>div{background:#111b1e;padding:22px;min-width:0}.detail-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.detail-title strong{font-size:14px}.detail-meta{color:#93a69f;font:10px ui-monospace,Consolas,monospace;margin:8px 0}.detail-label{color:#8b9f97;font:700 9px ui-monospace,Consolas,monospace;letter-spacing:1.2px;margin:17px 0 7px}.detail-code{display:block;margin:0;white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto;border:1px solid #2d4240;border-radius:7px;background:#0b1417;padding:12px;color:#cbdad0;font:11px/1.55 ui-monospace,Consolas,monospace}.detail-empty{color:#81948d;font-size:12px;line-height:1.5}.patch-layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:14px}.patch-index{padding:20px 15px;align-self:start}.patch-paths{display:grid;gap:6px;margin-top:14px}.patch-path{border:1px solid transparent;background:#192629;border-radius:7px;padding:11px;text-align:left;color:#d5e2d8;width:100%;overflow-wrap:anywhere}.patch-path:hover,.patch-path.active{border-color:#aadf80;background:#203229}.patch-path strong{display:block;font:11px ui-monospace,Consolas,monospace}.patch-path small{display:block;margin-top:5px;color:#8b9d91;font-size:10px}.patch-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;min-width:0}.patch-card{min-width:0;overflow:hidden}.patch-card-head{display:flex;align-items:center;gap:10px;padding:14px;border-bottom:1px solid #2a3b3a;font-size:10px}.patch-card-head strong{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.patch-card-head>span:last-child{margin-left:auto;color:#91a59c;white-space:nowrap}.patch-code{min-height:265px;max-height:500px;overflow:auto;background:#0c1518;padding:15px;color:#cbd9d0;font:10px/1.6 ui-monospace,Consolas,monospace;white-space:pre}.patch-code .line{display:block;min-height:1.6em}.patch-code .add{color:#b8e891;background:rgba(110,170,78,.1)}.patch-code .del{color:#f0a58e;background:rgba(188,96,70,.12)}.patch-code .hunk{color:#8fbcd9}.patch-empty{padding:24px;color:#879d94;font-size:12px;line-height:1.6;white-space:normal}.context-table{overflow:hidden}.context-head,.context-row{display:grid;grid-template-columns:180px 1fr 1fr;gap:15px;padding:13px 18px}.context-head{background:#1b2929;color:#b9df97;font-size:10px;letter-spacing:1px}.context-row{border-top:1px solid #293a39;font-size:12px;line-height:1.45}.context-row span:first-child{color:#92a59b;font-weight:700}.context-row span{overflow-wrap:anywhere}.context-row.different{background:#222a25}.context-row.different span:nth-child(2),.context-row.different span:nth-child(3){color:#d9edc1}.evidence-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.evidence-card{padding:22px}.evidence-columns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.evidence-columns>div{min-width:0}.evidence-item{border-top:1px solid #2c3b3c;padding:9px 0;color:#c3d1c7;overflow-wrap:anywhere;font:10px/1.55 ui-monospace,Consolas,monospace}.evidence-item:first-of-type{margin-top:8px}.evidence-empty{color:#71877c;font-size:11px;margin-top:12px}.coverage-note{color:#7f938c;font-size:10px;line-height:1.6;padding:17px 0 0}footer{max-width:1450px;margin:70px auto 0;border-top:1px solid #263636;padding:25px 48px 40px;display:flex;justify-content:space-between;gap:20px;color:#71877e;font-size:10px;letter-spacing:.4px}footer a{color:#bbe98c}footer a:hover{text-decoration:underline}
+@media(max-width:1100px){.topbar{padding:0 25px}.top-nav{gap:16px}.page-width{padding-left:30px;padding-right:30px}.hero{grid-template-columns:1.2fr .8fr}.hero h1{font-size:58px}.verdict-grid{grid-template-columns:1fr}.clues-list{grid-template-columns:repeat(3,1fr)}.clue{border-top:0;padding-top:0}.run-stats{grid-template-columns:repeat(2,1fr)}.patch-layout{grid-template-columns:1fr}.patch-paths{display:flex;overflow:auto}.patch-path{min-width:190px}.delta-strip{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.topbar{height:auto;min-height:66px;padding:12px 18px;gap:10px;flex-wrap:wrap}.brand{font-size:18px}.brand small{font-size:8px}.top-nav{order:3;width:100%;justify-content:space-between;font-size:10px}.top-actions{margin-left:auto}.top-actions .button{padding:0 9px;font-size:10px}.share-pill{font-size:8px}.page-width{padding-left:18px;padding-right:18px}.hero{display:block;min-height:0}.hero-copy{padding:53px 0 48px}.hero h1{font-size:48px;letter-spacing:-2.6px}.hero-copy>p{font-size:13px}.hero-fork{display:none}.section-intro{display:block}.section-intro p{margin-top:12px}.verdict{padding-top:48px}.fork-comparison,.run-grid,.event-detail,.patch-pair,.evidence-grid{grid-template-columns:1fr}.clues-list{display:grid;grid-template-columns:1fr}.clue{border-top:1px solid #29383a;padding-top:12px}.run-stats{grid-template-columns:repeat(4,1fr)}.run-stats strong{font-size:17px}.delta-strip{grid-template-columns:repeat(2,1fr)}.delta-strip>div{padding:15px}.delta-strip strong{font-size:21px}.timeline-toolbar{display:block}.timeline-toolbar>div:last-child{margin-top:12px}.legend{gap:10px}.timeline-head,.timeline-row{grid-template-columns:minmax(0,1fr) 36px minmax(0,1fr)}.timeline-cell{padding:10px}.timeline-cell b{font-size:10px}.timeline-cell small{font-size:9px}.timeline-step span{width:23px;height:23px}.timeline-row.first-fork:after{right:calc(50% - 30px)}.context-head,.context-row{grid-template-columns:90px 1fr 1fr;gap:7px;padding:10px;font-size:10px}.context-head{font-size:9px}footer{padding-left:18px;padding-right:18px;display:grid;gap:8px}}
+@media(max-width:420px){.top-actions .button{display:none}.hero h1{font-size:42px}.hero-actions{flex-wrap:wrap}.run-stats{grid-template-columns:repeat(2,1fr)}.delta-strip{grid-template-columns:1fr 1fr}.delta-strip span{font-size:8px}.section-intro h2{font-size:27px}}
+.patch-index,.patch-pair,.patch-card{min-width:0}
+@media(max-width:1100px){.patch-layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){.patch-pair{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="https://github.com/fang520huang-lgtm/AgentLens" aria-label="AgentLens on GitHub"><span class="brand-mark"><span></span><span></span><span></span></span><span>agent<span class="brand-accent">lens</span><small>COMPARE STUDIO</small></span></a>
+    <nav class="top-nav" aria-label="Page sections"><a href="#story">Overview</a><a href="#timeline">Timeline</a><a href="#changes">Patches</a><a href="#context">Context</a></nav>
+    <div class="top-actions"><span id="share-mode" class="share-pill">SHARE SAFE</span><button id="download-btn" class="button button-primary" type="button" title="Download a redacted, share-safe comparison">↓ Export HTML</button></div>
+  </header>
+  <main>
+    <section class="hero page-width">
+      <div class="hero-copy"><div class="eyebrow"><span class="eyebrow-line"></span> RUN INVESTIGATION · CODEX</div><h1 id="hero-title">Same task.<br><em>Different ending.</em></h1><p>Follow the first observed split, inspect what each run did next, and compare the code it left behind.</p><div class="hero-actions"><a class="button button-primary" href="#timeline">Inspect divergence ↘</a><button id="copy-summary" class="button button-outline" type="button">Copy PR summary</button></div></div>
+      <div class="hero-fork" aria-hidden="true"><div class="fork-start">PROMPT</div><div class="fork-stem"></div><div class="fork-paths"><div><span>A</span><b>●</b></div><div><span>B</span><b>●</b></div></div><div class="fork-label">FIRST OBSERVED SPLIT</div></div>
+    </section>
+    <section class="verdict page-width" id="story" aria-label="Comparison highlights">
+      <div class="section-intro"><div><span class="kicker">THE SHORT ANSWER</span><h2>Where the runs parted ways</h2></div><p>Observed differences are evidence to inspect, not proof of a root cause.</p></div>
+      <div class="verdict-grid"><article class="main-finding"><div class="finding-label"><span class="pulse-dot"></span> FIRST CAPTURED DIVERGENCE</div><h3 id="fork-heading">—</h3><p id="fork-reason" class="muted">—</p><div class="fork-comparison"><div><span class="run-tag a">RUN A</span><strong id="fork-a">—</strong></div><div><span class="run-tag b">RUN B</span><strong id="fork-b">—</strong></div></div><a class="text-link" href="#timeline">Open the side-by-side timeline ↗</a></article><article class="clues-card"><div class="card-kicker">CLUES WORTH CHECKING</div><div id="clues-list" class="clues-list"></div></article></div>
+      <div class="run-grid"><article class="run-card run-a"><div class="run-card-head"><span class="run-letter">A</span><div><span class="card-kicker">REFERENCE RUN</span><h3 id="a-id">Run A</h3></div><span id="a-outcome" class="outcome">—</span></div><p id="a-prompt" class="run-prompt">—</p><div class="run-stats"><div><span>COMMANDS</span><strong id="a-commands">—</strong></div><div><span>CHANGED FILES</span><strong id="a-files">—</strong></div><div><span>TOKENS</span><strong id="a-tokens">—</strong></div><div><span>DURATION</span><strong id="a-duration">—</strong></div></div></article><article class="run-card run-b"><div class="run-card-head"><span class="run-letter">B</span><div><span class="card-kicker">COMPARISON RUN</span><h3 id="b-id">Run B</h3></div><span id="b-outcome" class="outcome">—</span></div><p id="b-prompt" class="run-prompt">—</p><div class="run-stats"><div><span>COMMANDS</span><strong id="b-commands">—</strong></div><div><span>CHANGED FILES</span><strong id="b-files">—</strong></div><div><span>TOKENS</span><strong id="b-tokens">—</strong></div><div><span>DURATION</span><strong id="b-duration">—</strong></div></div></article></div>
+      <div class="delta-strip"><div><span>TOKEN DELTA · B − A</span><strong id="token-delta">—</strong><small id="token-breakdown">—</small></div><div><span>COMMANDS ONLY IN B</span><strong id="extra-commands">—</strong><small>after multiset comparison</small></div><div><span>DIFFERENT PATCHES</span><strong id="patch-delta">—</strong><small>including files unique to either run</small></div><div><span>FILES VIEWED ONLY IN B</span><strong id="file-delta">—</strong><small>inferred from read commands</small></div></div>
+    </section>
+    <section class="section page-width" id="timeline"><div class="section-intro"><div><span class="kicker">FRAME BY FRAME</span><h2>One timeline, two decisions</h2></div><p>Events are aligned by captured action where possible. Select a row to inspect outputs and status.</p></div><div class="timeline-toolbar"><div class="legend"><span><i class="legend-dot same"></i> Same</span><span><i class="legend-dot changed"></i> Different</span><span><i class="legend-dot single"></i> One run only</span></div><div><button id="jump-fork" class="small-button" type="button">↘ Jump to fork</button><button id="show-all" class="small-button" type="button" hidden>Show all events</button></div></div><p id="timeline-note" class="timeline-note"></p><div class="timeline-head"><span>RUN A</span><span>STEP</span><span>RUN B</span></div><div id="timeline-rows" class="timeline-rows"></div><div id="event-detail" class="event-detail" aria-live="polite"></div></section>
+    <section class="section page-width" id="changes"><div class="section-intro"><div><span class="kicker">WORKSPACE RESULT</span><h2>The patches they left behind</h2></div><p>Snapshots compare the workspace before and after each run. Select a file to read both patches.</p></div><div class="patch-layout"><div class="patch-index"><div class="card-kicker">CHANGED FILES</div><div id="patch-paths" class="patch-paths"></div></div><div class="patch-pair"><div class="patch-card"><div class="patch-card-head"><span class="run-tag a">RUN A</span><strong id="patch-a-title">—</strong><span id="patch-a-stat">—</span></div><div id="patch-a" class="patch-code"></div></div><div class="patch-card"><div class="patch-card-head"><span class="run-tag b">RUN B</span><strong id="patch-b-title">—</strong><span id="patch-b-stat">—</span></div><div id="patch-b" class="patch-code"></div></div></div></div></section>
+    <section class="section page-width" id="context"><div class="section-intro"><div><span class="kicker">WHAT ELSE CHANGED?</span><h2>Inputs and environment</h2></div><p>These fields can explain a changed outcome. Missing values mean the session did not capture them.</p></div><div class="context-table"><div class="context-head"><span>FIELD</span><span>RUN A</span><span>RUN B</span></div><div id="context-rows"></div></div><div class="evidence-grid"><article class="evidence-card"><div class="card-kicker">COMMANDS UNIQUE TO A / B</div><div class="evidence-columns"><div><span class="run-tag a">RUN A</span><div id="commands-a"></div></div><div><span class="run-tag b">RUN B</span><div id="commands-b"></div></div></div></article><article class="evidence-card"><div class="card-kicker">FILES LIKELY READ ONLY BY A / B</div><div class="evidence-columns"><div><span class="run-tag a">RUN A</span><div id="files-a"></div></div><div><span class="run-tag b">RUN B</span><div id="files-b"></div></div></div></article></div><p class="coverage-note">File views come from command inference. Snapshots can omit binary, large, or filtered files. Review the original sessions before treating a difference as causal.</p></section>
+  </main>
+  <footer><span>AGENTLENS COMPARE STUDIO</span><span>Two runs. One inspectable artifact.</span><a href="https://github.com/fang520huang-lgtm/AgentLens">View on GitHub ↗</a></footer>
+  <script id="comparison-data" type="application/json">{"a":{"schemaVersion":1,"agentlensVersion":"0.1.0","outcome":"completed","model":"demo-model","codexVersion":"synthetic","gitCommit":null,"dirtyBefore":false,"dirtyAfter":true,"sandbox":"workspace-write","platform":{"os":"linux","arch":"x64"},"captureCoverage":{"status":"captured","before":{"captured":42,"skipped":1,"bytes":113512,"skippedReasons":{"binary":1}},"after":{"captured":42,"skipped":1,"bytes":113690,"skippedReasons":{"binary":1}}},"id":"demo-cache-fix","agent":"codex","prompt":"Fix cache invalidation and add a regression test","cwd":"/workspace/atlas","startedAt":"2026-09-17T10:42:15.000Z","endedAt":"2026-09-17T10:43:04.000Z","exitCode":0,"demo":true,"threadId":"demo-agentlens-2026","durationMs":49000,"usage":{"input_tokens":12480,"cached_input_tokens":5942,"output_tokens":1876,"reasoning_output_tokens":1124},"stats":{"commands":4,"filesViewed":1,"filesChanged":2,"additions":13,"deletions":2},"viewedFiles":["src/cache.ts"],"changes":[{"path":"src/cache.ts","status":"modified","additions":5,"deletions":2,"diff":"--- a/src/cache.ts\n+++ b/src/cache.ts\n@@ -1,5 +1,8 @@\n export function getCached(key: string) {\n-  return store.get(key);\n+  const entry = store.get(key);\n+  if (!entry || entry.expiresAt \u003c Date.now()) {\n+    store.delete(key);\n+    return undefined;\n+  }\n+  return entry.value;\n }"},{"path":"tests/cache.test.ts","status":"modified","additions":8,"deletions":0,"diff":"--- a/tests/cache.test.ts\n+++ b/tests/cache.test.ts\n@@ -8,3 +8,11 @@\n describe(\"cache\", () =\u003e {\n+  it(\"expires stale entries\", () =\u003e {\n+    setCached(\"a\", 1, -1);\n+    expect(getCached(\"a\")).toBeUndefined();\n+  });\n+  it(\"invalidates by key\", () =\u003e {\n+    setCached(\"a\", 1, 100);\n+    invalidate(\"a\");\n+    expect(getCached(\"a\")).toBeUndefined();\n+  });\n });"}],"timeline":[{"id":"cmd1","at":"2026-09-17T10:42:18.000Z","kind":"command","title":"Command executed","detail":"","command":"rg --files src tests","output":"src/cache.ts\nsrc/client.ts\ntests/cache.test.ts","exitCode":0,"files":[],"changes":[],"status":"completed"},{"id":"cmd2","at":"2026-09-17T10:42:22.000Z","kind":"command","title":"Command executed","detail":"","command":"cat src/cache.ts","output":"export function getCached(key: string) {\n  return store.get(key);\n}","exitCode":0,"files":["src/cache.ts"],"changes":[],"status":"completed"},{"id":"cmd3","at":"2026-09-17T10:42:25.000Z","kind":"command","title":"Command executed","detail":"","command":"rg \"getCached|invalidate\" src tests","output":"src/cache.ts:4:export function getCached(key: string)\ntests/cache.test.ts:12:expect(getCached(\"a\"))","exitCode":0,"files":[],"changes":[],"status":"completed"},{"id":"edit1","at":"2026-09-17T10:42:32.000Z","kind":"change","title":"Code changed","detail":"","command":"","output":"","files":["src/cache.ts"],"changes":[{"path":"src/cache.ts","kind":"update"}],"status":"completed"},{"id":"edit2","at":"2026-09-17T10:42:39.000Z","kind":"change","title":"Code changed","detail":"","command":"","output":"","files":["tests/cache.test.ts"],"changes":[{"path":"tests/cache.test.ts","kind":"update"}],"status":"completed"},{"id":"cmd4","at":"2026-09-17T10:42:45.000Z","kind":"command","title":"Command executed","detail":"","command":"npm test -- --runInBand","output":"PASS tests/cache.test.ts\n  ✓ expires stale entries\n  ✓ invalidates by key\n\nTests: 2 passed, 2 total","exitCode":0,"files":[],"changes":[],"status":"completed"},{"id":"msg1","at":"2026-09-17T10:43:00.000Z","kind":"message","title":"Agent response","detail":"Fixed cache invalidation and added regression coverage. Both tests pass.","command":"","output":"","files":[],"changes":[],"status":"completed"}],"redaction":{"mode":"redacted","count":0,"categories":{},"note":"Pattern-based redaction. Review this export before sharing."}},"b":{"schemaVersion":1,"agentlensVersion":"0.1.0","outcome":"failed","model":"demo-model","codexVersion":"synthetic","gitCommit":null,"dirtyBefore":false,"dirtyAfter":true,"sandbox":"workspace-write","platform":{"os":"linux","arch":"x64"},"captureCoverage":{"status":"captured","before":{"captured":42,"skipped":1,"bytes":113512,"skippedReasons":{"binary":1}},"after":{"captured":42,"skipped":1,"bytes":113690,"skippedReasons":{"binary":1}}},"id":"demo-cache-failed","agent":"codex","prompt":"Fix cache invalidation and add a regression test","cwd":"/workspace/atlas","startedAt":"2026-09-17T11:42:15.000Z","endedAt":"2026-09-17T11:42:55.000Z","exitCode":1,"demo":true,"threadId":"demo-agentlens-compare","durationMs":40000,"usage":{"input_tokens":14120,"cached_input_tokens":6020,"output_tokens":2045,"reasoning_output_tokens":980},"stats":{"commands":4,"filesViewed":2,"filesChanged":1,"additions":2,"deletions":1},"viewedFiles":["src/cache.ts","src/client.ts"],"changes":[{"path":"src/cache.ts","status":"modified","additions":2,"deletions":1,"diff":"--- a/src/cache.ts\n+++ b/src/cache.ts\n@@ -1,3 +1,4 @@\n export function getCached(key: string) {\n-  return store.get(key);\n+  const entry = store.get(key);\n+  return entry?.value;\n }"}],"timeline":[{"id":"b-cmd1","at":"2026-09-17T11:42:18.000Z","kind":"command","title":"Command executed","detail":"","command":"rg --files src tests","output":"src/cache.ts\nsrc/client.ts\ntests/cache.test.ts","exitCode":0,"files":[],"changes":[],"status":"completed"},{"id":"b-cmd2","at":"2026-09-17T11:42:22.000Z","kind":"command","title":"Command executed","detail":"","command":"cat src/cache.ts","output":"export function getCached(key: string) {\n  return store.get(key);\n}","exitCode":0,"files":["src/cache.ts"],"changes":[],"status":"completed"},{"id":"b-cmd3","at":"2026-09-17T11:42:25.000Z","kind":"command","title":"Command executed","detail":"","command":"cat src/client.ts","output":"export const client = createClient({ cache: true });","exitCode":0,"files":["src/client.ts"],"changes":[],"status":"completed"},{"id":"b-edit1","at":"2026-09-17T11:42:33.000Z","kind":"change","title":"Code changed","detail":"","command":"","output":"","files":["src/cache.ts"],"changes":[{"path":"src/cache.ts","kind":"update"}],"status":"completed"},{"id":"b-cmd4","at":"2026-09-17T11:42:42.000Z","kind":"command","title":"Command executed","detail":"","command":"npm test -- --runInBand","output":"FAIL tests/cache.test.ts\n  ✕ expires stale entries\n  Expected: undefined\n  Received: 1\n\nTests: 1 failed, 1 passed, 2 total","exitCode":1,"files":[],"changes":[],"status":"completed"},{"id":"b-msg1","at":"2026-09-17T11:42:49.000Z","kind":"message","title":"Agent response","detail":"The cache patch did not handle expired entries. The regression test is still failing.","command":"","output":"","files":[],"changes":[],"status":"completed"}],"redaction":{"mode":"redacted","count":0,"categories":{},"note":"Pattern-based redaction. Review this export before sharing."}},"report":{"schemaVersion":1,"runs":[{"id":"demo-cache-fix","outcome":"completed"},{"id":"demo-cache-failed","outcome":"failed"}],"firstDifference":{"index":2,"fields":["action","output"],"a":{"kind":"command","signature":"command:rg \"getCached|invalidate\" src tests"},"b":{"kind":"command","signature":"command:cat src/client.ts"}},"eventCounts":{"a":7,"b":6},"commands":{"onlyA":["rg \"getCached|invalidate\" src tests"],"onlyB":["cat src/client.ts"]},"viewedFiles":{"onlyA":[],"onlyB":["src/client.ts"]},"patches":{"onlyA":["tests/cache.test.ts"],"onlyB":[],"different":["src/cache.ts"]},"patchLines":{"a":{"additions":13,"deletions":2},"b":{"additions":2,"deletions":1},"delta":{"additions":-11,"deletions":-1}},"tokens":{"a":{"input":12480,"output":1876,"total":14356},"b":{"input":14120,"output":2045,"total":16165},"delta":{"input":1640,"output":169,"total":1809}}}}</script>
+  <script id="share-html" type="application/octet-stream"></script>
+  <script>(() => {
+  const { a, b, report } = JSON.parse(document.getElementById('comparison-data').textContent);
+  const $ = id => document.getElementById(id);
+  const make = (tag, className, value) => {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (value !== undefined) element.textContent = String(value);
+    return element;
+  };
+  const number = value => new Intl.NumberFormat('en-US').format(value ?? 0);
+  const signed = value => `${value > 0 ? '+' : ''}${number(value)}`;
+  const compact = value => String(value ?? '').replaceAll('\\', '/').replace(/\s+/g, ' ').trim();
+  const label = value => value === null || value === undefined || value === '' ? 'Not recorded' : String(value);
+  const duration = ms => ms === undefined || ms === null ? '—' : ms < 60000 ? `${Math.round(ms / 1000)}s` : `${Math.floor(ms / 60000)}m ${Math.round(ms % 60000 / 1000)}s`;
+  const outcome = session => {
+    const value = session.outcome ?? (session.exitCode === undefined ? 'unknown' : session.exitCode === 0 ? 'completed' : 'failed');
+    return ['completed', 'failed', 'interrupted', 'recovered'].includes(value) ? value.toUpperCase() : 'UNKNOWN';
+  };
+  const title = event => !event ? 'No event' : event.command || event.detail || event.title || event.kind || 'Event';
+  const summary = event => !event ? 'No event captured in this run' : `${title(event)}${event.exitCode !== undefined ? ` · exit ${event.exitCode}` : ''}${event.output ? ` · ${compact(event.output).slice(0, 95)}` : ''}`;
+  const action = event => {
+    if (!event) return null;
+    const subject = event.kind === 'command' ? event.command : event.kind === 'change' ? (event.files ?? []).join('|') : event.detail || event.title;
+    return `${event.kind}:${compact(subject)}`;
+  };
+  const differences = (left, right) => {
+    if (!left || !right) return ['event missing'];
+    const fields = [];
+    if (action(left) !== action(right)) fields.push('action');
+    if (left.exitCode !== right.exitCode) fields.push('exit code');
+    if ((left.status ?? '') !== (right.status ?? '')) fields.push('status');
+    if (compact(left.output) !== compact(right.output)) fields.push('output');
+    return fields;
+  };
+
+  function alignEvents(left, right) {
+    const rows = [];
+    let i = 0, j = 0;
+    while (i < left.length || j < right.length) {
+      if (i >= left.length) { rows.push({ a: null, b: right[j], ai: null, bi: j++ }); continue; }
+      if (j >= right.length) { rows.push({ a: left[i], b: null, ai: i++, bi: null }); continue; }
+      if (action(left[i]) === action(right[j])) { rows.push({ a: left[i], b: right[j], ai: i++, bi: j++ }); continue; }
+      let best = null;
+      for (let da = 0; da <= 5 && i + da < left.length; da++) {
+        for (let db = 0; db <= 5 && j + db < right.length; db++) {
+          if (da + db === 0 || action(left[i + da]) !== action(right[j + db])) continue;
+          if (!best || da + db < best.da + best.db) best = { da, db };
+        }
+      }
+      if (best) {
+        for (let n = 0; n < best.da; n++) rows.push({ a: left[i], b: null, ai: i++, bi: null });
+        for (let n = 0; n < best.db; n++) rows.push({ a: null, b: right[j], ai: null, bi: j++ });
+      } else rows.push({ a: left[i], b: right[j], ai: i++, bi: j++ });
+    }
+    return rows;
+  }
+
+  const rows = alignEvents(a.timeline ?? [], b.timeline ?? []);
+  const firstFork = rows.findIndex(row => differences(row.a, row.b).length);
+  const firstFailure = (b.timeline ?? []).find(event => event.kind === 'error' || (event.kind === 'command' && ((event.exitCode !== undefined && Number(event.exitCode) !== 0) || event.status === 'failed')));
+  let selectedRow = firstFork >= 0 ? firstFork : 0;
+  let showAll = false;
+
+  function addClue(heading, detail, icon = '↗') {
+    const clue = make('div', 'clue');
+    const text = make('div');
+    text.append(make('strong', '', heading), make('span', '', detail));
+    clue.append(make('i', '', icon), text);
+    $('clues-list').append(clue);
+  }
+
+  function renderOverview() {
+    const raw = a.redaction?.mode === 'raw' || b.redaction?.mode === 'raw';
+    $('share-mode').textContent = raw ? 'RAW' : 'SHARE SAFE';
+    $('share-mode').classList.toggle('raw', raw);
+    $('share-mode').title = raw ? 'This comparison contains original session data.' : 'Pattern-based redaction. Review before sharing.';
+    if (!raw) document.querySelector('#context .coverage-note').textContent += ' Share-safe redaction can mask sensitive differences; use --raw locally for deeper inspection.';
+    if (outcome(a) === outcome(b)) $('hero-title').innerHTML = 'Two runs.<br><em>One clear view.</em>';
+    else if (!a.prompt || a.prompt !== b.prompt) $('hero-title').innerHTML = 'Two runs.<br><em>Different ending.</em>';
+    for (const [key, session] of [['a', a], ['b', b]]) {
+      $(`${key}-id`).textContent = label(session.id ?? session.threadId);
+      $(`${key}-outcome`).textContent = outcome(session);
+      $(`${key}-outcome`).classList.toggle('failed', outcome(session) === 'FAILED');
+      $(`${key}-outcome`).classList.toggle('interrupted', outcome(session) === 'INTERRUPTED');
+      $(`${key}-prompt`).textContent = label(session.prompt);
+      $(`${key}-commands`).textContent = number(session.stats?.commands ?? (session.timeline ?? []).filter(event => event.kind === 'command').length);
+      $(`${key}-files`).textContent = number(session.stats?.filesChanged ?? session.changes?.length);
+      $(`${key}-tokens`).textContent = number((session.usage?.input_tokens ?? 0) + (session.usage?.output_tokens ?? 0));
+      $(`${key}-duration`).textContent = duration(session.durationMs);
+    }
+    $('token-delta').textContent = signed(report.tokens.delta.total);
+    $('token-breakdown').textContent = `${signed(report.tokens.delta.input)} input · ${signed(report.tokens.delta.output)} output`;
+    $('extra-commands').textContent = number(report.commands.onlyB.length);
+    $('patch-delta').textContent = number(report.patches.onlyA.length + report.patches.onlyB.length + report.patches.different.length);
+    $('file-delta').textContent = number(report.viewedFiles.onlyB.length);
+    if (report.firstDifference) {
+      $('fork-heading').textContent = `Event ${report.firstDifference.index + 1} is the first observed split.`;
+      $('fork-reason').textContent = `The captured ${report.firstDifference.fields.join(' and ')} differs here. Follow the next events and final patches to understand the changed outcome.`;
+      $('fork-a').textContent = summary(a.timeline?.[report.firstDifference.index]);
+      $('fork-b').textContent = summary(b.timeline?.[report.firstDifference.index]);
+    } else {
+      $('fork-heading').textContent = 'Captured events follow the same path.';
+      $('fork-reason').textContent = 'The recorded event sequence matches. Compare run conditions, outcome and workspace patches below.';
+      $('fork-a').textContent = `${number(a.timeline?.length)} captured events`;
+      $('fork-b').textContent = `${number(b.timeline?.length)} captured events`;
+    }
+    if (firstFailure) addClue('Run B has a captured failure', summary(firstFailure), '!');
+    else if (outcome(b) === 'FAILED') addClue('Run B ended failed', compact(b.stderr || 'No failing command was captured; inspect the session outcome and logs.'), '!');
+    if (report.firstDifference) addClue('The paths split at a captured event', `Event ${report.firstDifference.index + 1}: ${report.firstDifference.fields.join(', ')} changed.`, '↗');
+    if (a.gitCommit !== b.gitCommit && (a.gitCommit || b.gitCommit)) addClue('The source revision changed', `A: ${label(a.gitCommit).slice(0, 12)} · B: ${label(b.gitCommit).slice(0, 12)}`, '⌁');
+    if (a.prompt !== b.prompt) addClue('The prompt changed', 'Inspect the exact request in the run cards and context table.', '✦');
+    if (a.model !== b.model && (a.model || b.model)) addClue('The model changed', `${label(a.model)} → ${label(b.model)}`, '◇');
+    if (report.patches.onlyA.length || report.patches.onlyB.length || report.patches.different.length) addClue('The final code differs', `${report.patches.onlyA.length} only in A · ${report.patches.onlyB.length} only in B · ${report.patches.different.length} different patch(es).`, '⌁');
+    if (!$('clues-list').children.length) addClue('No difference in the captured evidence', 'The recording may not include the cause. Inspect the original run logs.', '•');
+  }
+
+  function eventCell(event, side, index) {
+    const button = make('button', `timeline-cell${event ? '' : ' empty'}`);
+    button.type = 'button';
+    button.disabled = !event;
+    if (!event) { button.textContent = '—'; return button; }
+    button.setAttribute('aria-label', `Inspect run ${side} event ${index + 1}: ${title(event)}`);
+    button.append(make('b', event.exitCode !== undefined && Number(event.exitCode) !== 0 ? 'fail' : '', title(event)), make('small', '', `${event.kind ?? 'event'}${event.exitCode !== undefined ? ` · exit ${event.exitCode}` : ''}`));
+    return button;
+  }
+
+  function detailPanel(event, side, index) {
+    const panel = make('div');
+    const heading = make('div', 'detail-title');
+    heading.append(make('span', `run-tag ${side}`, `RUN ${side.toUpperCase()}`), make('strong', '', event ? `Event ${index + 1}` : 'No event'));
+    panel.append(heading);
+    if (!event) { panel.append(make('p', 'detail-empty', 'This run has no corresponding captured event.')); return panel; }
+    panel.append(make('div', 'detail-meta', `${event.kind ?? 'event'} · ${label(event.status)}${event.exitCode !== undefined ? ` · exit ${event.exitCode}` : ''}`));
+    for (const [name, value] of [['ACTION', event.command || event.detail || event.title], ['OUTPUT', event.output], ['REFERENCED FILES', event.files?.join('\n')]]) {
+      if (!value) continue;
+      const text = String(value);
+      panel.append(make('div', 'detail-label', name), make('pre', 'detail-code', text.slice(0, 30000) + (text.length > 30000 ? '\n\n[Preview truncated at 30,000 characters]' : '')));
+    }
+    return panel;
+  }
+
+  function selectRow(index) {
+    selectedRow = index;
+    document.querySelectorAll('.timeline-row').forEach(row => row.classList.toggle('selected', Number(row.dataset.index) === index));
+    const row = rows[index];
+    $('event-detail').replaceChildren(detailPanel(row?.a, 'a', row?.ai), detailPanel(row?.b, 'b', row?.bi));
+  }
+
+  function renderTimeline() {
+    const list = $('timeline-rows');
+    list.replaceChildren();
+    const start = !showAll && rows.length > 100 ? Math.max(0, (firstFork < 0 ? 0 : firstFork) - 15) : 0;
+    const end = !showAll && rows.length > 100 ? Math.min(rows.length, start + 80) : rows.length;
+    $('timeline-note').textContent = rows.length > 100 && !showAll ? `Showing ${start + 1}–${end} of ${rows.length} aligned events around the divergence.` : `${rows.length} aligned event rows · ${report.eventCounts.a} in A · ${report.eventCounts.b} in B`;
+    $('show-all').hidden = rows.length <= 100 || showAll;
+    for (let index = start; index < end; index++) {
+      const row = rows[index];
+      const change = differences(row.a, row.b);
+      const state = !change.length ? 'same' : !row.a || !row.b ? 'single' : 'changed';
+      const wrapper = make('div', `timeline-row ${state}${index === firstFork ? ' first-fork' : ''}${index === selectedRow ? ' selected' : ''}`);
+      wrapper.dataset.index = String(index);
+      const left = eventCell(row.a, 'A', row.ai);
+      const right = eventCell(row.b, 'B', row.bi);
+      left.addEventListener('click', () => selectRow(index));
+      right.addEventListener('click', () => selectRow(index));
+      wrapper.append(left, make('div', 'timeline-step', ''), right);
+      wrapper.children[1].append(make('span', '', index + 1));
+      list.append(wrapper);
+    }
+    if (!rows.length) list.append(make('p', 'detail-empty', 'Neither session contains captured events.'));
+    selectRow(selectedRow);
+  }
+
+  function renderPatch(change, titleId, statId, codeId, path) {
+    $(titleId).textContent = path ?? 'No captured patch';
+    $(statId).textContent = change ? `+${number(change.additions)} / −${number(change.deletions)}` : '—';
+    const target = $(codeId); target.replaceChildren();
+    if (!change?.diff) { target.append(make('div', 'patch-empty', 'No patch for this file in this run.')); return; }
+    const diff = String(change.diff);
+    for (const line of diff.slice(0, 80000).split('\n')) {
+      const style = line.startsWith('+') && !line.startsWith('+++') ? 'add' : line.startsWith('-') && !line.startsWith('---') ? 'del' : line.startsWith('@@') ? 'hunk' : '';
+      target.append(make('span', `line ${style}`, line));
+    }
+    if (diff.length > 80000) target.append(make('div', 'patch-empty', 'Patch preview truncated at 80,000 characters. Open the session artifact for the full patch.'));
+  }
+
+  function renderPatches() {
+    const left = new Map((a.changes ?? []).map(change => [change.path, change]));
+    const right = new Map((b.changes ?? []).map(change => [change.path, change]));
+    const paths = [...new Set([...left.keys(), ...right.keys()])].sort();
+    const first = [...report.patches.different, ...report.patches.onlyA, ...report.patches.onlyB][0] ?? paths[0];
+    const index = $('patch-paths');
+    if (!paths.length) index.append(make('p', 'detail-empty', 'No workspace patches were captured.'));
+    function select(path) {
+      document.querySelectorAll('.patch-path').forEach(button => button.classList.toggle('active', button.dataset.path === path));
+      renderPatch(left.get(path), 'patch-a-title', 'patch-a-stat', 'patch-a', path);
+      renderPatch(right.get(path), 'patch-b-title', 'patch-b-stat', 'patch-b', path);
+    }
+    for (const path of paths) {
+      const kind = !left.has(path) ? 'Only in B' : !right.has(path) ? 'Only in A' : left.get(path).diff === right.get(path).diff ? 'Same patch' : 'Different patch';
+      const button = make('button', 'patch-path');
+      button.type = 'button'; button.dataset.path = path;
+      button.append(make('strong', '', path), make('small', '', kind));
+      button.addEventListener('click', () => select(path));
+      index.append(button);
+    }
+    select(first);
+  }
+
+  function renderContext() {
+    const fields = [
+      ['Prompt', a.prompt, b.prompt], ['Started', a.startedAt, b.startedAt], ['Exit code', a.exitCode, b.exitCode],
+      ['Model', a.model, b.model], ['Git commit', a.gitCommit, b.gitCommit],
+      ['Dirty before', a.dirtyBefore, b.dirtyBefore], ['Dirty after', a.dirtyAfter, b.dirtyAfter],
+      ['Sandbox', a.sandbox, b.sandbox], ['Codex version', a.codexVersion, b.codexVersion],
+      ['Platform', a.platform?.os && a.platform?.arch ? `${a.platform.os} / ${a.platform.arch}` : null, b.platform?.os && b.platform?.arch ? `${b.platform.os} / ${b.platform.arch}` : null],
+      ['Snapshot coverage', a.captureCoverage?.status === 'captured' ? `${a.captureCoverage.after?.captured ?? 0} captured / ${a.captureCoverage.after?.skipped ?? 0} skipped` : null, b.captureCoverage?.status === 'captured' ? `${b.captureCoverage.after?.captured ?? 0} captured / ${b.captureCoverage.after?.skipped ?? 0} skipped` : null]
+    ];
+    for (const [name, left, right] of fields) {
+      const row = make('div', `context-row${left !== right ? ' different' : ''}`);
+      row.append(make('span', '', name), make('span', '', label(left)), make('span', '', label(right)));
+      $('context-rows').append(row);
+    }
+    for (const [id, values] of [['commands-a', report.commands.onlyA], ['commands-b', report.commands.onlyB], ['files-a', report.viewedFiles.onlyA], ['files-b', report.viewedFiles.onlyB]]) {
+      const target = $(id);
+      if (!values.length) target.append(make('p', 'evidence-empty', 'None captured'));
+      for (const value of values.slice(0, 15)) target.append(make('div', 'evidence-item', value));
+      if (values.length > 15) target.append(make('div', 'evidence-item', `+${values.length - 15} more`));
+    }
+  }
+
+  function prSummary() {
+    const first = report.firstDifference;
+    return [
+      '## AgentLens: Run A vs Run B',
+      `- Outcome: A ${outcome(a).toLowerCase()} → B ${outcome(b).toLowerCase()}`,
+      `- First captured divergence: ${first ? `event ${first.index + 1} (${first.fields.join(', ')})` : 'none in the event sequence'}`,
+      firstFailure ? `- First captured failure in B: event ${(b.timeline ?? []).indexOf(firstFailure) + 1}${firstFailure.exitCode !== undefined ? ` (exit ${Number(firstFailure.exitCode)})` : ''}` : null,
+      `- Commands unique to B: ${report.commands.onlyB.length}; files likely read only by B: ${report.viewedFiles.onlyB.length}`,
+      `- Patch differences: ${report.patches.different.length} changed differently, ${report.patches.onlyA.length} only in A, ${report.patches.onlyB.length} only in B`,
+      `- Token delta (B − A): ${signed(report.tokens.delta.total)}`,
+      '',
+      'Observed differences are not proof of cause. Review the attached comparison before sharing.'
+    ].filter(value => value !== null).join('\n');
+  }
+
+  function download() {
+    const encoded = $('share-html').textContent.trim();
+    const bytes = encoded ? Uint8Array.from(atob(encoded), char => char.charCodeAt(0)) : new TextEncoder().encode('<!doctype html>\n' + document.documentElement.outerHTML);
+    const url = URL.createObjectURL(new Blob([bytes], { type: 'text/html;charset=utf-8' }));
+    const link = make('a');
+    link.href = url;
+    link.download = `agentlens-compare-${String(b.id ?? 'run-b').replace(/[^a-z0-9_-]/gi, '-')}.html`;
+    document.body.append(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  async function copySummary() {
+    const value = prSummary();
+    let copied = false;
+    try { await navigator.clipboard.writeText(value); copied = true; }
+    catch {
+      const input = make('textarea'); input.value = value; document.body.append(input); input.select(); copied = document.execCommand('copy'); input.remove();
+    }
+    const button = $('copy-summary'); const original = button.textContent;
+    button.textContent = copied ? '✓ Copied summary' : 'Copy failed'; setTimeout(() => { button.textContent = original; }, 1800);
+  }
+
+  renderOverview(); renderTimeline(); renderPatches(); renderContext();
+  $('jump-fork').addEventListener('click', () => document.querySelector('.first-fork')?.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+  $('show-all').addEventListener('click', () => { showAll = true; renderTimeline(); });
+  $('copy-summary').addEventListener('click', copySummary);
+  $('download-btn').addEventListener('click', download);
+})();
+</script>
+</body>
+</html>

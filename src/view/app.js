@@ -19,6 +19,7 @@
     const workspace = (session.cwd ?? 'Workspace').replaceAll('\\', '/').split('/').filter(Boolean).at(-1);
     $('workspace-name').textContent = workspace || 'Workspace';
     $('run-id').textContent = (session.threadId ?? session.id ?? 'SESSION').slice(0, 10).toUpperCase();
+    $('demo-compare-link').hidden = !session.demo;
     $('run-status').textContent = ({ completed: 'COMPLETE', interrupted: 'INTERRUPTED', recovered: 'RECOVERED', failed: 'FAILED' })[session.outcome] ?? (session.exitCode === 0 || session.exitCode === undefined ? 'COMPLETE' : 'FAILED');
     $('share-mode').textContent = session.redaction?.mode === 'redacted' ? 'SHARE SAFE' : 'RAW';
     $('share-mode').classList.toggle('safe', session.redaction?.mode === 'redacted');

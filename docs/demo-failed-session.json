@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "agentlensVersion": "0.1.0",
+  "outcome": "failed",
+  "model": "demo-model",
+  "codexVersion": "synthetic",
+  "gitCommit": null,
+  "dirtyBefore": false,
+  "dirtyAfter": true,
+  "sandbox": "workspace-write",
+  "platform": {
+    "os": "linux",
+    "arch": "x64"
+  },
+  "captureCoverage": {
+    "status": "captured",
+    "before": {
+      "captured": 42,
+      "skipped": 1,
+      "bytes": 113512,
+      "skippedReasons": {
+        "binary": 1
+      }
+    },
+    "after": {
+      "captured": 42,
+      "skipped": 1,
+      "bytes": 113690,
+      "skippedReasons": {
+        "binary": 1
+      }
+    }
+  },
+  "id": "demo-cache-failed",
+  "agent": "codex",
+  "prompt": "Fix cache invalidation and add a regression test",
+  "cwd": "/workspace/atlas",
+  "startedAt": "2026-09-17T11:42:15.000Z",
+  "endedAt": "2026-09-17T11:42:55.000Z",
+  "exitCode": 1,
+  "demo": true,
+  "threadId": "demo-agentlens-compare",
+  "durationMs": 40000,
+  "usage": {
+    "input_tokens": 14120,
+    "cached_input_tokens": 6020,
+    "output_tokens": 2045,
+    "reasoning_output_tokens": 980
+  },
+  "stats": {
+    "commands": 4,
+    "filesViewed": 2,
+    "filesChanged": 1,
+    "additions": 2,
+    "deletions": 1
+  },
+  "viewedFiles": [
+    "src/cache.ts",
+    "src/client.ts"
+  ],
+  "changes": [
+    {
+      "path": "src/cache.ts",
+      "status": "modified",
+      "additions": 2,
+      "deletions": 1,
+      "diff": "--- a/src/cache.ts\n+++ b/src/cache.ts\n@@ -1,3 +1,4 @@\n export function getCached(key: string) {\n-  return store.get(key);\n+  const entry = store.get(key);\n+  return entry?.value;\n }"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "b-cmd1",
+      "at": "2026-09-17T11:42:18.000Z",
+      "kind": "command",
+      "title": "Command executed",
+      "detail": "",
+      "command": "rg --files src tests",
+      "output": "src/cache.ts\nsrc/client.ts\ntests/cache.test.ts",
+      "exitCode": 0,
+      "files": [],
+      "changes": [],
+      "status": "completed"
+    },
+    {
+      "id": "b-cmd2",
+      "at": "2026-09-17T11:42:22.000Z",
+      "kind": "command",
+      "title": "Command executed",
+      "detail": "",
+      "command": "cat src/cache.ts",
+      "output": "export function getCached(key: string) {\n  return store.get(key);\n}",
+      "exitCode": 0,
+      "files": [
+        "src/cache.ts"
+      ],
+      "changes": [],
+      "status": "completed"
+    },
+    {
+      "id": "b-cmd3",
+      "at": "2026-09-17T11:42:25.000Z",
+      "kind": "command",
+      "title": "Command executed",
+      "detail": "",
+      "command": "cat src/client.ts",
+      "output": "export const client = createClient({ cache: true });",
+      "exitCode": 0,
+      "files": [
+        "src/client.ts"
+      ],
+      "changes": [],
+      "status": "completed"
+    },
+    {
+      "id": "b-edit1",
+      "at": "2026-09-17T11:42:33.000Z",
+      "kind": "change",
+      "title": "Code changed",
+      "detail": "",
+      "command": "",
+      "output": "",
+      "files": [
+        "src/cache.ts"
+      ],
+      "changes": [
+        {
+          "path": "src/cache.ts",
+          "kind": "update"
+        }
+      ],
+      "status": "completed"
+    },
+    {
+      "id": "b-cmd4",
+      "at": "2026-09-17T11:42:42.000Z",
+      "kind": "command",
+      "title": "Command executed",
+      "detail": "",
+      "command": "npm test -- --runInBand",
+      "output": "FAIL tests/cache.test.ts\n  ✕ expires stale entries\n  Expected: undefined\n  Received: 1\n\nTests: 1 failed, 1 passed, 2 total",
+      "exitCode": 1,
+      "files": [],
+      "changes": [],
+      "status": "completed"
+    },
+    {
+      "id": "b-msg1",
+      "at": "2026-09-17T11:42:49.000Z",
+      "kind": "message",
+      "title": "Agent response",
+      "detail": "The cache patch did not handle expired entries. The regression test is still failing.",
+      "command": "",
+      "output": "",
+      "files": [],
+      "changes": [],
+      "status": "completed"
+    }
+  ]
+}

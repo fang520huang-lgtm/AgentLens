@@ -9,6 +9,7 @@
 .inspector-head{flex:none}.inspector #inspector-content{flex:1;min-height:0;overflow:auto}.inspector-body{overflow:visible}.inspector-close{display:none;border:1px solid #3b4b49;background:#1c2a29;color:#d7ebcf;border-radius:6px;width:28px;height:28px;place-items:center}.inspector-head .inspector-dots{margin-left:auto}@media(max-width:1250px){.inspector.open{display:flex;position:fixed;top:0;right:0;width:min(380px,100vw);height:100dvh;z-index:50;box-shadow:-16px 0 60px rgba(0,0,0,.55)}.inspector-close{display:grid;margin-left:15px}}
 .share-pill{font:700 9px 'JetBrains Mono',monospace;letter-spacing:1px;border:1px solid #755343;background:#34221e;color:#f5b39c;border-radius:5px;padding:6px 8px;white-space:nowrap}.share-pill.safe{border-color:#476144;background:#1c3025;color:#b6e883}@media(max-width:760px){.top-actions{gap:8px}.share-pill{font-size:8px;padding:5px}.status-pill{display:none}.export-btn span{display:none}}
 .coverage-bar{margin:12px 38px 0;border:1px solid #2a3d38;background:#121d1b;border-radius:8px;padding:11px 14px;display:flex;align-items:center;gap:12px;color:#9eb2a7;font-size:10px}.coverage-label{font:700 9px 'JetBrains Mono',monospace;letter-spacing:1px;color:#aee47a}.coverage-bar strong{font:600 10px 'JetBrains Mono',monospace;color:#d2e7d0}.coverage-note{margin-left:auto;color:#728a80;font:9px 'JetBrains Mono',monospace}@media(max-width:760px){.coverage-bar{margin:12px 20px 0;flex-wrap:wrap}.coverage-note{margin-left:0;width:100%}}
+.demo-compare-link{color:#b8eb84;font:700 10px 'JetBrains Mono',monospace;white-space:nowrap}.demo-compare-link:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -30,7 +31,7 @@
     </aside>
 
     <main class="main-content">
-      <header class="topbar"><div class="breadcrumbs">WORKSPACE <span>/</span> RUNS <span>/</span> <b id="run-id">SESSION</b></div><div class="top-actions"><span class="share-pill" id="share-mode">RAW</span><span class="status-pill"><i></i><span id="run-status">COMPLETE</span></span><button id="download-btn" class="export-btn" title="Download a redacted HTML replay">↓ <span>Export HTML</span></button></div></header>
+      <header class="topbar"><div class="breadcrumbs">WORKSPACE <span>/</span> RUNS <span>/</span> <b id="run-id">SESSION</b></div><div class="top-actions"><a id="demo-compare-link" class="demo-compare-link" href="https://fang520huang-lgtm.github.io/AgentLens/compare.html" hidden>Compare runs ↗</a><span class="share-pill" id="share-mode">RAW</span><span class="status-pill"><i></i><span id="run-status">COMPLETE</span></span><button id="download-btn" class="export-btn" title="Download a redacted HTML replay">↓ <span>Export HTML</span></button></div></header>
 
       <section class="hero">
         <div class="hero-decoration" aria-hidden="true"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><span class="core">✦</span></div>
@@ -86,6 +87,7 @@
     const workspace = (session.cwd ?? 'Workspace').replaceAll('\\', '/').split('/').filter(Boolean).at(-1);
     $('workspace-name').textContent = workspace || 'Workspace';
     $('run-id').textContent = (session.threadId ?? session.id ?? 'SESSION').slice(0, 10).toUpperCase();
+    $('demo-compare-link').hidden = !session.demo;
     $('run-status').textContent = ({ completed: 'COMPLETE', interrupted: 'INTERRUPTED', recovered: 'RECOVERED', failed: 'FAILED' })[session.outcome] ?? (session.exitCode === 0 || session.exitCode === undefined ? 'COMPLETE' : 'FAILED');
     $('share-mode').textContent = session.redaction?.mode === 'redacted' ? 'SHARE SAFE' : 'RAW';
     $('share-mode').classList.toggle('safe', session.redaction?.mode === 'redacted');

@@ -1,10 +1,10 @@
 # AgentLens Replay
 
-**A replay button for AI coding agents.** See what Codex likely read, ran, and changed, with token usage and capture coverage in one local timeline. Export a redacted, standalone HTML artifact for a PR or teammate.
+**A replay button for AI coding agents.** See what Codex likely read, ran, and changed, then compare two runs to find where they diverged. Export a redacted, standalone HTML artifact for a PR or teammate.
 
 ![AgentLens timeline overview](docs/screenshots/timeline.png)
 
-[Live demo](https://fang520huang-lgtm.github.io/AgentLens/) · [Session schema](docs/session-schema.md) · [中文说明](#中文说明)
+[Replay demo](https://fang520huang-lgtm.github.io/AgentLens/) · [Run A vs Run B demo](https://fang520huang-lgtm.github.io/AgentLens/compare.html) · [Session schema](docs/session-schema.md) · [中文说明](#中文说明)
 
 **Inspect a command and its output**
 
@@ -32,6 +32,25 @@ agentlens export .agentlens/runs/<id> --out agent-run.html
 agentlens compare .agentlens/runs/run-a .agentlens/runs/run-b
 ```
 
+## Run A vs Run B
+
+**Why did the same prompt succeed yesterday and fail today?** `agentlens compare` creates a standalone page that puts both runs side by side. It highlights the first captured divergence, the first failing command, commands and likely file views unique to each run, patch differences, token usage, and changes in prompt, model, Git state, or sandbox. Click a timeline row or file to inspect both sides. Copy a short summary into a PR.
+
+![AgentLens Run A vs Run B comparison](docs/screenshots/compare.png)
+
+[Side-by-side timeline](docs/screenshots/compare-timeline.png) · [Patch comparison](docs/screenshots/compare-patches.png) · [Mobile view](docs/screenshots/compare-mobile.png) · [Open live demo](https://fang520huang-lgtm.github.io/AgentLens/compare.html)
+
+The page is **redacted by default** and opens automatically in an interactive terminal. It is saved as `comparison.html` beside Run B's `session.json`. The page's **Export HTML** button downloads a share-safe copy, including when the local page was generated with `--raw`.
+
+```bash
+agentlens compare .agentlens/runs/run-a .agentlens/runs/run-b --out comparison.html
+agentlens compare .agentlens/runs/run-a .agentlens/runs/run-b --text  # original details in terminal
+agentlens compare .agentlens/runs/run-a .agentlens/runs/run-b --json  # original details for automation
+agentlens compare .agentlens/runs/run-a .agentlens/runs/run-b --raw --no-open
+```
+
+The first divergence includes command exit codes and outputs, so two runs that execute the same command but get different results still show a split. It describes captured evidence, not a proven cause. Redaction may mask sensitive differences; use `--raw` locally when needed, and review the page before sharing it.
+
 ## A shareable artifact, with a clear boundary
 
 The local `session.json` and `index.html` preserve original commands, outputs, and code for debugging. **`agentlens export` redacts by default**; the replay's **Export HTML** button downloads the same redacted standalone page. The page labels itself `SHARE SAFE` or `RAW`.
@@ -49,7 +68,7 @@ Redaction covers common API tokens, authorization headers, private keys, secret 
 - **Inspector:** command output, status, referenced files, and workspace patches.
 - **Coverage:** files captured and skipped at run start and end. Files viewed are inferred from read/search commands; this is not a complete file access log.
 - **Recovery:** `agentlens recover <run-directory>` rebuilds `session.json` and HTML from a surviving `events.jsonl`. A recovered run may have no patch if the final snapshot was not taken.
-- **Comparison:** `agentlens compare run-a run-b` shows the first differing captured event, extra commands, unique file views, patch differences, and token delta. Add `--json` for automation.
+- **Comparison:** `agentlens compare run-a run-b` opens the Run A vs Run B page. Use `--text` for the terminal report or `--json` for automation.
 
 ```bash
 agentlens recover .agentlens/runs/<id>
@@ -69,13 +88,13 @@ npm test
 npm run demo
 ```
 
-CI runs the same synthetic JSONL fixture and export checks on Ubuntu, macOS, and Windows. The [public demo](https://fang520huang-lgtm.github.io/AgentLens/) uses a synthetic sample run. AgentLens records Codex only; it does not run its own agent model.
+CI runs the same synthetic JSONL fixture and export checks on Ubuntu, macOS, and Windows. The [replay demo](https://fang520huang-lgtm.github.io/AgentLens/) and [comparison demo](https://fang520huang-lgtm.github.io/AgentLens/compare.html) use synthetic sample runs. AgentLens records Codex only; it does not run its own agent model.
 
 To refresh the README screenshots, run `npm run demo` and then `python scripts/capture-demo.py` (requires Playwright and Chrome).
 
 ## 中文说明
 
-在 Git 项目里运行 `agentlens run codex "任务"`，即可得到本地时间线。`agentlens export <运行目录> --out replay.html` 默认导出脱敏的单文件页面；`--raw` 才导出原始内容。录制中断后可以用 `agentlens recover <运行目录>` 重建回放，也可以用 `agentlens compare <运行 A> <运行 B>` 比较两次执行。文件读取是根据命令推断的，分享前仍请检查导出内容。
+在 Git 项目里运行 `agentlens run codex "任务"`，即可得到本地时间线。`agentlens compare <运行 A> <运行 B>` 会生成左右并排的对比页面，标出首次可观察分叉、失败命令和代码差异；默认脱敏。`agentlens export <运行目录> --out replay.html` 也默认导出脱敏的单文件页面；`--raw` 才包含原始内容。录制中断后可以用 `agentlens recover <运行目录>` 重建回放。文件读取是根据命令推断的，分享前仍请检查导出内容。
 
 ## License
 

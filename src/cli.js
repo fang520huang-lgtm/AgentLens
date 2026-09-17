@@ -8,6 +8,7 @@ import { writeHtml } from './render.js';
 import { codexVersion, coverageFor, gitState } from './metadata.js';
 import { recoverRun } from './recover.js';
 import { compareRuns, formatComparison } from './compare.js';
+import { writeComparisonHtml } from './compare-render.js';
 
 const usage = `AgentLens — record and replay AI coding agent runs
 
@@ -16,7 +17,9 @@ Usage:
   agentlens replay <run-directory-or-session.json>
   agentlens export <run-directory-or-session.json> [--out replay.html] [--raw]
   agentlens recover <run-directory>
-  agentlens compare <run-a> <run-b> [--json]
+  agentlens compare <run-a> <run-b> [--out comparison.html] [--raw] [--no-open]
+  agentlens compare <run-a> <run-b> --text
+  agentlens compare <run-a> <run-b> --json
 
 Run options:
   --cwd <path>        Workspace to run Codex in (default: current directory)
@@ -27,6 +30,7 @@ Run options:
   --help              Show this help
 
 Exports are redacted by default; --raw includes original content.
+Comparison HTML is redacted by default. --text and --json print original session details.
 Codex CLI must be installed and authenticated. Recordings stay in .agentlens/runs/.
 `;
 
@@ -235,13 +239,42 @@ export async function main(args) {
     return;
   }
   if (command === 'compare') {
-    if (!target || !rest[0]) throw new Error('Use `agentlens compare <run-a> <run-b> [--json]`.');
+    if (!target || !rest[0]) throw new Error('Use `agentlens compare <run-a> <run-b> [--out comparison.html] [--raw] [--no-open]`.');
     const [other, ...options] = rest;
-    if (options.some(option => option !== '--json')) throw new Error(`Unknown compare option: ${options.find(option => option !== '--json')}`);
+    let out = join(dirname(sessionPath(other)), 'comparison.html');
+    let mode = 'redacted';
+    let modeFlag = null;
+    let open = true;
+    let format = 'html';
+    for (let i = 0; i < options.length; i++) {
+      if (options[i] === '--out') {
+        if (!options[i + 1]) throw new Error('--out requires a path.');
+        out = resolve(options[++i]);
+      } else if (options[i] === '--raw' || options[i] === '--redact') {
+        if (modeFlag) throw new Error('Choose only one of --raw or --redact.');
+        modeFlag = options[i];
+        mode = options[i] === '--raw' ? 'raw' : 'redacted';
+      } else if (options[i] === '--no-open') open = false;
+      else if (options[i] === '--json' || options[i] === '--text') {
+        if (format !== 'html') throw new Error('Choose only one of --text or --json.');
+        format = options[i].slice(2);
+      } else throw new Error(`Unknown compare option: ${options[i]}`);
+    }
+    if (format !== 'html' && (options.includes('--out') || options.includes('--raw') || options.includes('--redact') || options.includes('--no-open'))) {
+      throw new Error('--text and --json cannot be combined with HTML options.');
+    }
     const a = JSON.parse(readFileSync(sessionPath(target), 'utf8'));
     const b = JSON.parse(readFileSync(sessionPath(other), 'utf8'));
     const report = compareRuns(a, b);
-    console.log(options.includes('--json') ? JSON.stringify(report, null, 2) : formatComparison(report));
+    if (format === 'json') console.log(JSON.stringify(report, null, 2));
+    else if (format === 'text') console.log(formatComparison(report));
+    else {
+      mkdirSync(dirname(out), { recursive: true });
+      writeComparisonHtml(a, b, out, { mode });
+      console.log(`Comparison: ${out} (${mode === 'redacted' ? 'share-safe, pattern-based redaction' : 'raw, contains original data'})`);
+      console.log(report.firstDifference ? `First captured divergence: event ${report.firstDifference.index + 1} (${report.firstDifference.fields.join(', ')})` : 'No difference in the captured event sequence.');
+      if (open && process.stdout.isTTY) openFile(out);
+    }
     return;
   }
   if (command === 'export') {

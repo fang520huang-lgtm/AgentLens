@@ -10,6 +10,16 @@ function eventSignature(item) {
   return `${item.kind}:${normalized(subject)}`;
 }
 
+function eventDifferences(a, b) {
+  if (!a || !b) return ['event missing'];
+  const fields = [];
+  if (eventSignature(a) !== eventSignature(b)) fields.push('action');
+  if (a.exitCode !== b.exitCode) fields.push('exit code');
+  if ((a.status ?? '') !== (b.status ?? '')) fields.push('status');
+  if (normalized(a.output) !== normalized(b.output)) fields.push('output');
+  return fields;
+}
+
 function difference(left, right) {
   const other = new Set(right);
   return [...new Set(left)].filter(item => !other.has(item)).sort();
@@ -32,7 +42,7 @@ export function compareRuns(a, b) {
   const timelineB = b.timeline ?? [];
   let firstDifferentIndex = 0;
   while (firstDifferentIndex < timelineA.length && firstDifferentIndex < timelineB.length &&
-    eventSignature(timelineA[firstDifferentIndex]) === eventSignature(timelineB[firstDifferentIndex])) firstDifferentIndex++;
+    eventDifferences(timelineA[firstDifferentIndex], timelineB[firstDifferentIndex]).length === 0) firstDifferentIndex++;
   const commandsA = timelineA.filter(item => item.kind === 'command').map(item => normalized(item.command));
   const commandsB = timelineB.filter(item => item.kind === 'command').map(item => normalized(item.command));
   const changesA = new Map((a.changes ?? []).map(item => [item.path, item]));
@@ -50,6 +60,7 @@ export function compareRuns(a, b) {
     runs: [{ id: a.id ?? 'run-a', outcome: a.outcome ?? null }, { id: b.id ?? 'run-b', outcome: b.outcome ?? null }],
     firstDifference: firstDifferentIndex === timelineA.length && firstDifferentIndex === timelineB.length ? null : {
       index: firstDifferentIndex,
+      fields: eventDifferences(timelineA[firstDifferentIndex], timelineB[firstDifferentIndex]),
       a: timelineA[firstDifferentIndex] ? { kind: timelineA[firstDifferentIndex].kind, signature: eventSignature(timelineA[firstDifferentIndex]) } : null,
       b: timelineB[firstDifferentIndex] ? { kind: timelineB[firstDifferentIndex].kind, signature: eventSignature(timelineB[firstDifferentIndex]) } : null
     },
@@ -77,7 +88,7 @@ export function compareRuns(a, b) {
 export function formatComparison(report) {
   const lines = [
     `AgentLens comparison: ${report.runs[0].id} → ${report.runs[1].id}`,
-    report.firstDifference ? `First difference: event ${report.firstDifference.index + 1}` : 'Captured event sequence: identical',
+    report.firstDifference ? `First difference: event ${report.firstDifference.index + 1} (${report.firstDifference.fields.join(', ')})` : 'Captured event sequence: identical',
     `  A: ${report.firstDifference?.a?.signature ?? '—'}`,
     `  B: ${report.firstDifference?.b?.signature ?? '—'}`,
     `Commands only in A (${report.commands.onlyA.length}): ${report.commands.onlyA.join(' | ') || '—'}`,

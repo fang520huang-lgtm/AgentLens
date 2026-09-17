@@ -8,7 +8,8 @@ import { join } from 'node:path';
 import { analyze } from '../src/analyze.js';
 import { inferViewedFiles } from '../src/analyze.js';
 import { compareRuns } from '../src/compare.js';
-import { runCodex } from '../src/cli.js';
+import { main, runCodex } from '../src/cli.js';
+import { renderComparisonHtml } from '../src/compare-render.js';
 import { readRecordedEvents, recoverRun } from '../src/recover.js';
 import { redactSession } from '../src/redact.js';
 import { renderHtml } from '../src/render.js';
@@ -75,6 +76,38 @@ test('compare identifies the first changed event, file sets, patches, and token 
   assert.deepEqual(report.patches.onlyB, ['b.ts']);
   assert.deepEqual(report.patchLines.delta, { additions: 0, deletions: 0 });
   assert.equal(report.tokens.delta.total, 5);
+});
+
+test('compare finds a failed result even when both runs execute the same command', () => {
+  const command = 'npm test';
+  const a = { timeline: [{ kind: 'command', command, output: '2 passed', exitCode: 0, status: 'completed' }] };
+  const b = { timeline: [{ kind: 'command', command, output: '1 failed', exitCode: 1, status: 'completed' }] };
+  const report = compareRuns(a, b);
+  assert.equal(report.firstDifference.index, 0);
+  assert.deepEqual(report.firstDifference.fields, ['exit code', 'output']);
+  assert.deepEqual(report.commands, { onlyA: [], onlyB: [] });
+});
+
+test('comparison HTML is share-safe by default and the CLI writes it as one file', async () => {
+  const root = mkdtempSync(join(tmpdir(), 'agentlens-compare-'));
+  const secret = 'sk-proj-abcdefghijklmnopqrstuv';
+  const a = { id: 'a', outcome: 'completed', prompt: `Fix tests with ${secret} </script><script>alert(1)</script>`, timeline: [{ kind: 'command', command: 'npm test', output: '2 passed', exitCode: 0 }], changes: [], viewedFiles: [], usage: {} };
+  const b = { id: 'b', outcome: 'failed', prompt: `Fix tests with ${secret}`, timeline: [{ kind: 'command', command: 'npm test', output: `FAIL ${secret}`, exitCode: 1 }], changes: [], viewedFiles: [], usage: {} };
+  try {
+    const safe = renderComparisonHtml(a, b);
+    assert.match(safe, /SHARE SAFE/);
+    assert.doesNotMatch(safe, /sk-proj-abcdefghijklmnopqrstuv/);
+    assert.doesNotMatch(safe, /<\/script><script>alert\(1\)/);
+    assert.doesNotMatch(safe, /<script id="share-html"[^>]*>[^<]+/);
+    const raw = renderComparisonHtml(a, b, { mode: 'raw' });
+    const encoded = raw.match(/<script id="share-html"[^>]*>([^<]+)<\/script>/)?.[1];
+    assert.equal(Buffer.from(encoded, 'base64').toString('utf8'), safe);
+    const left = join(root, 'a.json'); const right = join(root, 'b.json'); const out = join(root, 'nested', 'comparison.html');
+    writeFileSync(left, JSON.stringify(a)); writeFileSync(right, JSON.stringify(b));
+    await main(['compare', left, right, '--out', out, '--no-open']);
+    assert.ok(existsSync(out));
+    assert.equal(readFileSync(out, 'utf8'), safe);
+  } finally { rmSync(root, { recursive: true, force: true }); }
 });
 
 test('captures a non-Git directory containing spaces and Chinese file names', () => {
