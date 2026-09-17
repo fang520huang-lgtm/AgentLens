@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { analyze } from '../src/analyze.js';
@@ -8,6 +8,14 @@ import { writeComparisonHtml } from '../src/compare-render.js';
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const docs = join(root, 'docs');
 mkdirSync(docs, { recursive: true });
+const site = 'https://fang520huang-lgtm.github.io/AgentLens/';
+function addSiteMetadata(file, title, description, canonical) {
+  const html = readFileSync(file, 'utf8');
+  const metadata = `  <title>${title}</title>\n  <meta name="description" content="${description}">\n  <link rel="canonical" href="${canonical}">`;
+  const updated = html.replace(/  <title>[^\n]*<\/title>/, metadata);
+  if (updated === html) throw new Error(`Could not add site metadata to ${file}`);
+  writeFileSync(file, updated);
+}
 const start = Date.parse('2026-09-17T10:42:15.000Z');
 const at = seconds => new Date(start + seconds * 1000).toISOString();
 const raw = [
@@ -43,6 +51,12 @@ const demo = analyze(raw, changes, {
 });
 writeFileSync(join(docs, 'demo-session.json'), JSON.stringify(demo, null, 2) + '\n');
 writeHtml(demo, join(docs, 'index.html'), { mode: 'redacted' });
+addSiteMetadata(
+  join(docs, 'index.html'),
+  'AgentLens — Replay Codex runs',
+  'Replay a captured Codex run as an interactive timeline. Inspect commands, output, file changes, and tokens, then export a share-safe HTML report.',
+  site
+);
 
 const failedRaw = [
   { at: at(3600), event: { type: 'thread.started', thread_id: 'demo-agentlens-compare' } },
@@ -68,4 +82,10 @@ const failed = analyze(failedRaw, failedChanges, {
 });
 writeFileSync(join(docs, 'demo-failed-session.json'), JSON.stringify(failed, null, 2) + '\n');
 writeComparisonHtml(demo, failed, join(docs, 'compare.html'));
+addSiteMetadata(
+  join(docs, 'compare.html'),
+  'AgentLens — Compare Codex runs',
+  'Compare two Codex runs side by side to find the first different action, extra commands, file views, patches, and token changes.',
+  `${site}compare.html`
+);
 console.log(`Built demos at ${join(docs, 'index.html')} and ${join(docs, 'compare.html')}`);
